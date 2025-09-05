@@ -1,0 +1,25 @@
+.navbar-container {
+    border-bottom: 1px solid black;
+}
+
+mat-toolbar {
+    background-color: white;
+    height: 100px !important;
+}
+
+.example-spacer {
+    flex: 1 1 auto;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+.links-container {
+    display: flex;
+}
+
+.links-container a {
+    padding: 0 5px;
+}

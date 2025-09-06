@@ -1,42 +1,44 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # Compiled output
-/blogsite/dist
-/blogsite/tmp
-/blogsite/out-tsc
-/blogsite/bazel-out
+/dist
+/tmp
+/out-tsc
+/bazel-out
 
 # Node
-/blogsite/node_modules
-/blogsite/npm-debug.log
-/blogsite/yarn-error.log
+/node_modules
+npm-debug.log
+yarn-error.log
 
 # IDEs and editors
-/blogsite/.idea/
-/blogsite/.project
-/blogsite/.classpath
-/blogsite/.c9/
-/blogsite/*.launch
-/blogsite/.settings/
-/blogsite/*.sublime-workspace
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
 
 # Visual Studio Code
-/blogsite/.vscode/*
-/blogsite/!.vscode/settings.json
-/blogsite/!.vscode/tasks.json
-/blogsite/!.vscode/launch.json
-/blogsite/!.vscode/extensions.json
-/blogsite/.history/*
+.vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
 
 # Miscellaneous
-/blogsite/.angular/cache
-/blogsite/.sass-cache/
-/blogsite/connect.lock
-/blogsite/coverage
-/blogsite/libpeerconnection.log
-/blogsitetestem.log
-/blogsite/typings
+.angular
+/.angular/cache
+.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
 
 # System files
-/blogsite/.DS_Store
-/blogsite/Thumbs.db
+.DS_Store
+Thumbs.db

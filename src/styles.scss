@@ -1,0 +1,38 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mat-mdc-snack-bar-container {
+    &.snackbar-success {
+      --mdc-snackbar-container-color: #1c591e;
+    }
+    &.snackbar-error {
+      --mdc-snackbar-container-color: #f44336;
+    }
+    &.snackbar-warning {
+      --mdc-snackbar-container-color: #8b5605;
+    }
+}
+
+// .mdc-text-field--filled:not(.mdc-text-field--disabled)  {
+//   background-color: rgb(255,255,255) !important;
+// }
+
+.mdc-tab--active .mdc-tab__text-label {
+  color: black !important;
+  font-family: monospace
+}
+
+.login-dialog-backdrop {
+  background: transparent !important;
+}
+
+.login-dialog-panel .mat-mdc-dialog-surface {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.login-dialog-panel .mat-mdc-dialog-container {
+  padding: 0 !important;
+}

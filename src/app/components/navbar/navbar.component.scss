@@ -1,0 +1,27 @@
+.navbar {
+    padding: 1rem;    
+}
+
+.site-icon {
+    background-image: url("../../../assets/blog-icon.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: block;
+    width: 5rem;
+    height: 5rem;
+}
+
+a, .navbar-nav .nav-item .nav-link {
+    color: black !important;
+}
+
+.navbar-nav .nav-item {
+    font-size: 1.3rem;
+}
+
+a.login_icons {
+    text-decoration: none;
+    cursor: pointer;
+    color: black !important;
+}

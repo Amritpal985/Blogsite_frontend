@@ -7,9 +7,9 @@
         <span class="example-spacer"></span>
 
         <div class="links-container">
-            <a routerLink="/store"> <h1>Start</h1></a>
-            <a routerLink="/community"><h1>Community</h1></a>
-            <a routerLink="/about"><h1>Explore</h1></a>
+            <a routerLink=""> <h1>Start</h1></a>
+            <a routerLink=""><h1>Community</h1></a>
+            <a routerLink=""><h1>Explore</h1></a>
         </div>
 
         <span class="example-spacer"></span>
@@ -21,12 +21,9 @@
         }
 
         @if (!isLoggedIn) {
-            <a routerLink="/login">
-                <button mat-icon-button>
-                    <mat-icon>login</mat-icon>
-                </button>
-            </a>
+            <button routerLink="/login">login</button>
         }
+
         @if (isLoggedIn) {
             <button (click)="logout()" mat-icon-button>
                 <mat-icon>logout</mat-icon>

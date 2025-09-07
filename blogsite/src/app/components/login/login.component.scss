@@ -1,5 +1,11 @@
 .parent {
-    padding-top: 2.5rem;
+    padding-top: 1rem;
+    background-image: url("../../../assets/login-image.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 83vh;
+    width: 100%;
 }
 
 #container {
@@ -18,7 +24,7 @@
 
 .login-form, .signup-form {
     max-width: 400px;
-    margin: 2rem auto;
+    margin: 1rem auto;
     padding: 1rem;
     display: flex;
     flex-direction: column;

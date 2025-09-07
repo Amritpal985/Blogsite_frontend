@@ -14,3 +14,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
       --mdc-snackbar-container-color: #8b5605;
     }
 }
+
+// .mdc-text-field--filled:not(.mdc-text-field--disabled)  {
+//   background-color: rgb(255,255,255) !important;
+// }
+
+.mdc-tab--active .mdc-tab__text-label {
+  color: white !important;
+}

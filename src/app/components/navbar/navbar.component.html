@@ -14,20 +14,12 @@
 
     <span class="example-spacer"></span>
 
-    @if (isLoggedIn) {
-      <button (click)="openDashboard()" mat-icon-button>
-        <mat-icon style="transform: scale(1.3)">account_circle</mat-icon>
-      </button>
-    }
-
     @if (!isLoggedIn) {
       <button routerLink="/login">login</button>
     }
 
     @if (isLoggedIn) {
-      <button (click)="logout()" mat-icon-button>
-        <mat-icon>logout</mat-icon>
-      </button>
+      <button (click)="logout()">logout</button>
     }
   </mat-toolbar>
 </div>

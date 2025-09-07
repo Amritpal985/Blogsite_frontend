@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -6,9 +6,12 @@ import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { Constants } from '../../constants';
+import { PopupService } from '../../services/popup/popup.service';
+import { LoginService } from '../../services/login/login.service';
+import { LoginUser } from '../../interfaces';
 
 @Component({
   selector: 'app-login',
@@ -26,11 +29,12 @@ import { Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private fb = inject(FormBuilder);
-  private snackBar = inject(MatSnackBar);
   private _http = inject(HttpClient);
   private router = inject(Router);
+  private popupService = inject(PopupService);
+  private loginService = inject(LoginService);
 
   loginForm: FormGroup = this.fb.group({
     username: ['', [Validators.required, Validators.minLength(6)]],
@@ -45,77 +49,77 @@ export class LoginComponent {
     confirmPassword: ['', [Validators.required, Validators.minLength(6)]],
   });
 
-  onSubmit(isLoginForm: boolean) {
+  ngOnInit(): void {
+    if (this.loginService.isUserLoggedIn()) {
+      this.router.navigate(['']);
+      return;
+    }
+    Promise.resolve().then(() => {
+      this.loginService.loginPage$.next(true);
+    });
+  }
+
+  /**
+   * It either logins a user or create new account(signup).
+   * @param isLoginForm flag to detect if user is login or singup/
+   * @returns void.
+   */
+  onSubmit(isLoginForm: boolean): void {
     if (isLoginForm) {
       if (this.loginForm.invalid) {
-        this.snackBar.open('Some fields are invalid.', 'Close', {
-          duration: 4000,
-          verticalPosition: 'top',
-          panelClass: ['snackbar-warning'],
-        });
+        this.popupService.showAlertMessage(Constants.INVALID_FORM_MSG, Constants.SNACKBAR_WARNING);
         return;
       }
-      const url = 'http://localhost:8000/users/login';
       const body = new URLSearchParams();
       body.set('username', this.loginForm.get('username')?.value);
       body.set('password', this.loginForm.get('password')?.value);
       this._http
-        .post(url, body.toString(), {
+        .post<LoginUser>(Constants.LOGIN_USER, body.toString(), {
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         })
         .subscribe(
-          () => {
-            this.snackBar.open('User LoggedIn Successfully!!', 'Close', {
-              duration: 4000,
-              verticalPosition: 'top',
-              panelClass: ['snackbar-success'],
-            });
+          (res: LoginUser) => {
+            this.popupService.showAlertMessage(Constants.LOGIN_MSG, Constants.SNACKBAR_SUCCESS);
+            this.loginService.loginUser(res.access_token);
             this.router.navigate(['']);
+            this.loginService.loginPage$.next(false);
+            this.loginService.loginSubject$.next(true);
           },
           (error) => {
-            this.snackBar.open(error?.error?.detail || 'Something went wrong!!!', 'Close', {
-              duration: 4000,
-              verticalPosition: 'top',
-              panelClass: ['snackbar-error'],
-            });
+            this.popupService.showAlertMessage(
+              error?.error?.detail || Constants.GENERIC_MSG,
+              Constants.SNACKBAR_ERROR
+            );
           }
         );
     } else {
       if (this.signupForm.invalid) {
-        this.snackBar.open('Some fields are invalid.', 'Close', {
-          duration: 4000,
-          verticalPosition: 'top',
-          panelClass: ['snackbar-warning'],
-        });
+        this.popupService.showAlertMessage(Constants.INVALID_FORM_MSG, Constants.SNACKBAR_WARNING);
         return;
       }
       if (
         this.signupForm.get('password')?.value !== this.signupForm.get('confirmPassword')?.value
       ) {
-        this.snackBar.open('Passwords do not match.', 'Close', {
-          duration: 4000,
-          verticalPosition: 'top',
-          panelClass: ['snackbar-error'],
-        });
+        this.popupService.showAlertMessage(
+          Constants.PASSWORDS_MISMATCH_MSG,
+          Constants.SNACKBAR_ERROR
+        );
         return;
       }
-      const url = 'http://localhost:8000/users/signup';
       const body = { ...this.signupForm.value, role: 'user' };
 
-      this._http.post(url, body).subscribe(
+      this._http.post(Constants.CREATE_USER, body).subscribe(
         () => {
-          this.snackBar.open('User created Successfully!!', 'Close', {
-            duration: 4000,
-            verticalPosition: 'top',
-            panelClass: ['snackbar-success'],
-          });
+          this.popupService.showAlertMessage(
+            Constants.USER_CREATED_MSG,
+            Constants.SNACKBAR_SUCCESS
+          );
         },
         (error) => {
-          this.snackBar.open(error?.error?.detail || 'Something went wrong!!!', 'Close', {
-            duration: 4000,
-            verticalPosition: 'top',
-            panelClass: ['snackbar-error'],
-          });
+          this.popupService.showAlertMessage(
+            error?.error?.detail || Constants.GENERIC_MSG,
+            Constants.SNACKBAR_ERROR
+          );
         }
       );
     }

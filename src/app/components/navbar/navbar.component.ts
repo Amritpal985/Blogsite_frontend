@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
+import { LoginService } from '../../services/login/login.service';
 
 @Component({
   selector: 'app-navbar',
@@ -10,12 +12,27 @@ import { RouterModule } from '@angular/router';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+  private loginService = inject(LoginService);
+
   isLoggedIn = false;
-  openDashboard() {
-    //
+
+  ngOnInit(): void {
+    this.loginService.loginSubject$
+      .asObservable()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.isLoggedIn = this.loginService.isUserLoggedIn();
+      });
   }
+
   logout() {
-    //
+    this.loginService.logoutUser();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<nav class="navbar navbar-expand-lg bg-transparent">
   <div class="container-fluid">
-    <a class="navbar-brand" routerLink="">Blog </a>
+    <a class="navbar-brand site-icon" routerLink=""></a>
     <button
       class="navbar-toggler"
       type="button"
@@ -13,7 +13,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" routerLink="">Start</a>
         </li>
@@ -26,11 +26,15 @@
       </ul>
 
       @if (!isLoggedIn) {
-        <button routerLink="/login">login</button>
+        <a routerLink="/login" class="login_icons">
+          <i class="fa-solid fa-sign-in fa-2x" title="Login"></i>
+        </a>
       }
 
       @if (isLoggedIn) {
-        <button (click)="logout()">logout</button>
+        <a (click)="logout()" class="login_icons">
+          <i class="fa-solid fa-sign-out fa-2x" title="Logout"></i>
+        </a>
       }
     </div>
   </div>

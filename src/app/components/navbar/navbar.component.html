@@ -1,25 +1,37 @@
-<div class="navbar-container">
-  <mat-toolbar>
-    <span class="example-spacer"></span>
-    <a class="website_icon" routerLink="">
-      <h1>Blog</h1>
-    </a>
-    <span class="example-spacer"></span>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="">Blog </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" routerLink="">Start</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" routerLink="">Community</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" routerLink="">Explore</a>
+        </li>
+      </ul>
 
-    <div class="links-container">
-      <a routerLink=""> <h1>Start</h1></a>
-      <a routerLink=""><h1>Community</h1></a>
-      <a routerLink=""><h1>Explore</h1></a>
+      @if (!isLoggedIn) {
+        <button routerLink="/login">login</button>
+      }
+
+      @if (isLoggedIn) {
+        <button (click)="logout()">logout</button>
+      }
     </div>
-
-    <span class="example-spacer"></span>
-
-    @if (!isLoggedIn) {
-      <button routerLink="/login">login</button>
-    }
-
-    @if (isLoggedIn) {
-      <button (click)="logout()">logout</button>
-    }
-  </mat-toolbar>
-</div>
+  </div>
+</nav>

@@ -1,0 +1,35 @@
+
+#top {
+  color: white;
+  background: #031c33;
+  min-height: 50vh;
+  background-image: url("../../../assets/posts-home-bg.jpg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
+}
+
+.top-title, .top-sub-title {
+  padding-top: 8rem !important;
+}
+
+.top-title {
+  font-family: monospace;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.top-sub-title {
+  font-family: monospace;
+  font-size: 1rem;
+}
+
+#content {
+  width: 80%;
+  margin: auto;
+}
+
+.card {
+  width: 100%;
+  border: 1px solid rgb(223, 221, 221);
+}

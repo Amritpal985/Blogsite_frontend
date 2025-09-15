@@ -1,0 +1,49 @@
+<div id="parent d-flex">
+  <div id="top"></div>
+  <div id="content" class="mt-4 d-flex flex-column">
+    <div class="filter-box d-flex">
+      <div class="tags">
+        <mat-form-field appearance="outline">
+          <mat-label>Tags</mat-label>
+          <mat-select multiple>
+            <mat-option value="pizza">Art</mat-option>
+            <mat-option value="burger">Tech</mat-option>
+            <mat-option value="sushi">Sports</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="author-name mx-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Author name</mat-label>
+          <input matInput placeholder="Enter author name" />
+        </mat-form-field>
+      </div>
+      <div class="search-button">
+        <button mat-raised-button>Search</button>
+      </div>
+    </div>
+    <div class="posts" *ngIf="allPosts.length">
+      <mat-card class="card my-4" *ngFor="let post of allPosts">
+        <mat-card-header>
+          <mat-card-title> {{ post.title }} </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{ post.content }}</p>
+        </mat-card-content>
+        <mat-card-actions class="d-flex justify-content-between">
+          <div>
+            <button mat-button>
+              <mat-icon>thumb_up</mat-icon>
+            </button>
+            <button mat-button>
+              <mat-icon>open_in_new</mat-icon>
+            </button>
+          </div>
+          <div>
+            <button mat-button>{{ post.author.username }}</button>
+          </div>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+</div>

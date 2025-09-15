@@ -2,6 +2,7 @@ export class Constants {
   // urls
   public static readonly CREATE_USER = 'http://localhost:8000/users/signup';
   public static readonly LOGIN_USER = 'http://localhost:8000/users/login';
+  public static readonly ALL_POSTS = 'http://localhost:8000/posts';
 
   // messages
   public static readonly LOGIN_MSG = 'User LoggedIn Successfully.';

@@ -4,8 +4,12 @@ export interface LoginUser {
 }
 
 export interface Posts {
+  id: number;
   title: string;
   content: string;
-  image: string;
   created_at: string;
+  author: {
+    id: number;
+    username: string;
+  };
 }

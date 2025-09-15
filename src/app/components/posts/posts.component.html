@@ -1,11 +1,5 @@
 <div id="parent d-flex">
-  <div id="top" class="row">
-    <div class="top-title col-5 p-5">Discover Stories, Ideas, and Inspiration from Every Angle</div>
-    <div class="top-sub-title col-7 p-5">
-      Your daily mix of thoughtful insights, tips,<br />
-      and adventures—right here.
-    </div>
-  </div>
+  <div id="top"></div>
   <div id="content" class="mt-4 d-flex flex-column">
     <div class="filter-box d-flex">
       <div class="tags">
@@ -36,9 +30,18 @@
         <mat-card-content>
           <p>{{ post.content }}</p>
         </mat-card-content>
-        <mat-card-actions>
-          <button mat-button>LIKE</button>
-          <button mat-button>SHARE</button>
+        <mat-card-actions class="d-flex justify-content-between">
+          <div>
+            <button mat-button>
+              <mat-icon>thumb_up</mat-icon>
+            </button>
+            <button mat-button>
+              <mat-icon>share</mat-icon>
+            </button>
+          </div>
+          <div>
+            <button mat-button>{{ post.author.username }}</button>
+          </div>
         </mat-card-actions>
       </mat-card>
     </div>

@@ -8,6 +8,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+// import { mockData } from '../../mock-data';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-posts',
@@ -20,6 +22,7 @@ import { MatInputModule } from '@angular/material/input';
     MatFormFieldModule,
     MatSelectModule,
     MatInputModule,
+    MatIconModule,
   ],
   templateUrl: './posts.component.html',
   styleUrl: './posts.component.scss',

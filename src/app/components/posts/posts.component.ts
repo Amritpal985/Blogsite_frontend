@@ -11,28 +11,24 @@ import { MatButtonModule } from '@angular/material/button';
   standalone: true,
   imports: [CommonModule, HttpClientModule, MatCardModule, MatButtonModule],
   templateUrl: './posts.component.html',
-  styleUrl: './posts.component.scss'
+  styleUrl: './posts.component.scss',
 })
 export class PostsComponent implements OnInit {
   private _http = inject(HttpClient);
 
   allPosts: Posts[] = [];
 
-
   ngOnInit(): void {
-    
-    let headers : HttpHeaders = new HttpHeaders();
-    headers = headers.set("Authorization", `Bearer ${localStorage.getItem('token')}`);
+    let headers: HttpHeaders = new HttpHeaders();
+    headers = headers.set('Authorization', `Bearer ${localStorage.getItem('token')}`);
 
-    this._http.get<Posts[]>(Constants.ALL_POSTS, {headers})
-    .subscribe(
-      (res) =>{
+    this._http.get<Posts[]>(Constants.ALL_POSTS, { headers }).subscribe(
+      (res) => {
         this.allPosts = res;
       },
-      (err)=>{}
-    )
-    
+      (err) => {
+        console.log(err);
+      }
+    );
   }
-
-
 }

@@ -1,20 +1,23 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { RouterModule } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { LoginService } from '../../services/login/login.service';
+import { LoginComponent } from '../login/login.component';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [MatIconModule, MatToolbarModule, RouterModule],
+  imports: [MatIconModule, MatToolbarModule, RouterModule, MatDialogModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private loginService = inject(LoginService);
+  private dialog = inject(MatDialog);
 
   isLoggedIn = false;
 
@@ -25,6 +28,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.isLoggedIn = this.loginService.isUserLoggedIn();
       });
+  }
+
+  openDialog() {
+    this.dialog.open(LoginComponent, {
+      panelClass: 'login-dialog-panel',
+      backdropClass: 'login-dialog-backdrop',
+    });
   }
 
   logout() {

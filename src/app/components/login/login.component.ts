@@ -12,6 +12,7 @@ import { Constants } from '../../constants';
 import { PopupService } from '../../services/popup/popup.service';
 import { LoginService } from '../../services/login/login.service';
 import { LoginUser } from '../../interfaces';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-login',
@@ -35,6 +36,7 @@ export class LoginComponent implements OnInit {
   private router = inject(Router);
   private popupService = inject(PopupService);
   private loginService = inject(LoginService);
+  private dialogRef = inject(MatDialogRef<LoginComponent>);
 
   loginForm: FormGroup = this.fb.group({
     username: ['', [Validators.required, Validators.minLength(6)]],
@@ -54,9 +56,6 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['']);
       return;
     }
-    Promise.resolve().then(() => {
-      this.loginService.loginPage$.next(true);
-    });
   }
 
   /**
@@ -79,10 +78,10 @@ export class LoginComponent implements OnInit {
         })
         .subscribe(
           (res: LoginUser) => {
-            this.popupService.showAlertMessage(Constants.LOGIN_MSG, Constants.SNACKBAR_SUCCESS);
             this.loginService.loginUser(res.access_token);
+            this.popupService.showAlertMessage(Constants.LOGIN_MSG, Constants.SNACKBAR_SUCCESS);
+            this.dialogRef.close();
             this.router.navigate(['']);
-            this.loginService.loginPage$.next(false);
             this.loginService.loginSubject$.next(true);
           },
           (error) => {

@@ -5,7 +5,6 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class LoginService {
-  loginPage$ = new BehaviorSubject<boolean>(false);
   loginSubject$ = new BehaviorSubject<boolean>(false);
 
   /**

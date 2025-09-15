@@ -26,8 +26,8 @@
       </ul>
 
       @if (!isLoggedIn) {
-        <a routerLink="/login" class="login_icons">
-          <i class="fa-solid fa-sign-in fa-2x" title="Login"></i>
+        <a class="login_icons">
+          <i class="fa-solid fa-sign-in fa-2x" title="Login" (click)="openDialog()"></i>
         </a>
       }
 

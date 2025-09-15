@@ -20,6 +20,19 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 // }
 
 .mdc-tab--active .mdc-tab__text-label {
-  color: white !important;
+  color: black !important;
   font-family: monospace
+}
+
+.login-dialog-backdrop {
+  background: transparent !important;
+}
+
+.login-dialog-panel .mat-mdc-dialog-surface {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.login-dialog-panel .mat-mdc-dialog-container {
+  padding: 0 !important;
 }

@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { PostsComponent } from './components/posts/posts.component';
+import { AddPostComponent } from './components/add-post/add-post.component';
 
 export const routes: Routes = [
   {
@@ -11,6 +12,11 @@ export const routes: Routes = [
   {
     path: 'posts',
     component: PostsComponent,
+    pathMatch: 'full',
+  },
+  {
+    path: 'add-post',
+    component: AddPostComponent,
     pathMatch: 'full',
   },
 ];

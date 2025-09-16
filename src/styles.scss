@@ -19,6 +19,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 //   background-color: rgb(255,255,255) !important;
 // }
 
+.mat-mdc-form-field-focus-overlay {
+  background: white !important;
+}
+
+.mat-mdc-text-field-wrapper {
+  background: white !important;
+}
+
 .mdc-tab--active .mdc-tab__text-label {
   color: black !important;
   font-family: monospace

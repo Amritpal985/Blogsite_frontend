@@ -1,0 +1,20 @@
+#parent {
+    padding-top: 4rem;
+    background-color: #031c33;
+    background: #f5f1f6;
+}
+
+.container, .instructions-container {
+    width: 70%;
+    margin: auto;
+}
+
+::ng-deep {
+  .NgxEditor {
+    height: 20rem;
+    overflow-y: scroll;
+  }
+  .NgxEditor__Content {
+    min-height: 20rem;
+  }
+}

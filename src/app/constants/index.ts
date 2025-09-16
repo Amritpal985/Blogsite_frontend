@@ -9,7 +9,11 @@ export class Constants {
   public static readonly USER_CREATED_MSG = 'User created Successfully.';
   public static readonly PASSWORDS_MISMATCH_MSG = 'Passwords do not match.';
   public static readonly INVALID_FORM_MSG = 'Some fields are invalid.';
-  public static readonly GENERIC_MSG = 'Something went wrong.';
+  public static readonly GENERIC_MSG = 'Something error has occurred. Please try again.';
+
+  // *********unsaved-data-warning*********
+  public static readonly UNSAVED_DATA_WARNING_TITLE = 'Unsaved Changes.';
+  public static readonly UNSAVED_DATA_WARNING_MSG = 'Are you sure you want to leave?';
 
   // snackbar classes
   public static readonly SNACKBAR_SUCCESS = 'snackbar-success';

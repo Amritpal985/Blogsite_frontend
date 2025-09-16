@@ -3,19 +3,19 @@
   <div id="content" class="mt-4 d-flex flex-column">
     <div class="filter-box d-flex">
       <div class="tags">
-        <mat-form-field appearance="fill">
-          <mat-label>Favorite food</mat-label>
-          <mat-select>
-            <mat-option value="pizza">Pizza</mat-option>
-            <mat-option value="burger">Burger</mat-option>
-            <mat-option value="sushi">Sushi</mat-option>
+        <mat-form-field appearance="outline">
+          <mat-label>Tags</mat-label>
+          <mat-select multiple>
+            <mat-option value="pizza">Art</mat-option>
+            <mat-option value="burger">Tech</mat-option>
+            <mat-option value="sushi">Sports</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
       <div class="author-name mx-3">
-        <mat-form-field class="example-full-width">
-          <mat-label>Favorite food</mat-label>
-          <input matInput placeholder="Ex. Pizza" value="Sushi" />
+        <mat-form-field appearance="outline">
+          <mat-label>Author name</mat-label>
+          <input matInput placeholder="Enter author name" />
         </mat-form-field>
       </div>
       <div class="search-button">

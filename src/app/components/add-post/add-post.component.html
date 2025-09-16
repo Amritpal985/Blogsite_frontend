@@ -6,10 +6,10 @@
                 <mat-label>Title</mat-label>
                 <input type="text" matInput>
             </mat-form-field>
-            <mat-form-field class="w-100">
-                <mat-label>Title</mat-label>
-                <textarea matInput></textarea>
-            </mat-form-field>
+            <div class="NgxEditor__Wrapper">
+                <ngx-editor-menu [editor]="editor"> </ngx-editor-menu>
+                <ngx-editor [editor]="editor" [ngModel]="html" [disabled]="false" [placeholder]="'Type here...'"></ngx-editor>
+            </div>
         </div>
         <div class="content m-5">content</div>
         <div class="tags m-5">tags</div>

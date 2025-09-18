@@ -1,10 +1,18 @@
 #parent {
-    border: 1px solid red;
     padding-top: 4rem;
 }
 
 .container {
-    border: 1px solid blue;
     width: 70%;
     margin: auto;
+}
+
+::ng-deep {
+  .NgxEditor {
+    height: 20rem;
+    overflow-y: scroll;
+  }
+  .NgxEditor__Content {
+    min-height: 20rem;
+  }
 }

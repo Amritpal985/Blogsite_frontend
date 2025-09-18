@@ -9,6 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { Editor, NgxEditorModule } from 'ngx-editor';
 import { CustomDialogComponent } from '../custom-dialog/custom-dialog.component';
 import { lastValueFrom } from 'rxjs';
+import { Constants } from '../../constants';
 
 @Component({
   selector: 'app-add-post',
@@ -41,16 +42,24 @@ export class AddPostComponent implements OnInit, OnDestroy {
     });
   }
 
-  hasUnsavedChanges() {
+  /**
+   * It checks if the form has some unsaved changes when navigating away from the page.
+   * @returns a boolean value.
+   */
+  hasUnsavedChanges(): boolean {
     const { title, content, tags } = this.form.value;
     return !!(title?.trim() || content?.trim() || tags?.length);
   }
 
+  /**
+   * It shows warning message to the user about unsaved changes when leaving the page.
+   * @returns boolean value indicating whether the user wants to leave the page or not.
+   */
   async openPageLeavingConfirmation() {
     const dialogRef = this.dialog.open(CustomDialogComponent, {
       data: {
-        title: 'Unsaved Changes.',
-        message: 'Are you sure you want to leave?',
+        title: Constants.UNSAVED_DATA_WARNING_TITLE,
+        message: Constants.UNSAVED_DATA_WARNING_MSG,
       },
     });
     return await lastValueFrom(dialogRef.afterClosed());

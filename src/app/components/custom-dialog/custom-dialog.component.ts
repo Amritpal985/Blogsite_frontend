@@ -13,6 +13,10 @@ export class CustomDialogComponent {
   private dialogRef = inject(MatDialogRef<CustomDialogComponent>);
   public data = inject(MAT_DIALOG_DATA);
 
+  /**
+   * It closes the dialog box.
+   * @param value true or false based on if the user has click `Yes` or `No`.
+   */
   close(value: boolean) {
     this.dialogRef.close(value);
   }

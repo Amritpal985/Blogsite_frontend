@@ -30,6 +30,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
       });
   }
 
+  /**
+   * It opens dialog for login/signup user.
+   */
   openDialog() {
     this.dialog.open(LoginComponent, {
       panelClass: 'login-dialog-panel',
@@ -37,6 +40,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * It logout the user.
+   */
   logout() {
     this.loginService.logoutUser();
   }

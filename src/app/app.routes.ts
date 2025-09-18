@@ -2,21 +2,24 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { PostsComponent } from './components/posts/posts.component';
 import { AddPostComponent } from './components/add-post/add-post.component';
+import { authGuard, pageLeaveCheck } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
     path: '',
-    component: HomeComponent,
     pathMatch: 'full',
+    component: HomeComponent,
   },
   {
     path: 'posts',
-    component: PostsComponent,
     pathMatch: 'full',
+    component: PostsComponent,
   },
   {
     path: 'add-post',
-    component: AddPostComponent,
     pathMatch: 'full',
+    canActivate: [authGuard],
+    canDeactivate: [pageLeaveCheck],
+    component: AddPostComponent,
   },
 ];

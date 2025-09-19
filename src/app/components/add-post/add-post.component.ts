@@ -6,10 +6,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatChipsModule } from '@angular/material/chips';
 import { Editor, NgxEditorModule } from 'ngx-editor';
 import { CustomDialogComponent } from '../custom-dialog/custom-dialog.component';
 import { lastValueFrom } from 'rxjs';
 import { Constants } from '../../constants';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-add-post',
@@ -23,6 +25,8 @@ import { Constants } from '../../constants';
     NgxEditorModule,
     FormsModule,
     ReactiveFormsModule,
+    MatChipsModule,
+    MatIconModule,
   ],
   templateUrl: './add-post.component.html',
   styleUrl: './add-post.component.scss',
@@ -32,6 +36,8 @@ export class AddPostComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private dialog = inject(MatDialog);
   form!: FormGroup;
+
+  selectOptions = ['first', 'second', 'third', 'fourth', 'fifth'];
 
   ngOnInit(): void {
     this.editor = new Editor();
@@ -63,6 +69,12 @@ export class AddPostComponent implements OnInit, OnDestroy {
       },
     });
     return await lastValueFrom(dialogRef.afterClosed());
+  }
+
+  removeTag(tag: string) {
+    this.form.patchValue({
+      tags: this.form.value.tags.filter((el: string) => el !== tag),
+    });
   }
 
   savePost() {

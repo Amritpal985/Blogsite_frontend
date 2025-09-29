@@ -3,6 +3,7 @@ import { HomeComponent } from './components/home/home.component';
 import { PostsComponent } from './components/posts/posts.component';
 import { AddPostComponent } from './components/add-post/add-post.component';
 import { authGuard, pageLeaveCheck } from './guards/auth.guard';
+import { PostComponent } from './components/post/post.component';
 
 export const routes: Routes = [
   {
@@ -21,5 +22,10 @@ export const routes: Routes = [
     canActivate: [authGuard],
     canDeactivate: [pageLeaveCheck],
     component: AddPostComponent,
+  },
+  {
+    path: 'post/:id',
+    pathMatch: 'full',
+    component: PostComponent,
   },
 ];

@@ -5,7 +5,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .mat-mdc-snack-bar-container {
     &.snackbar-success {
-      --mdc-snackbar-container-color: #1c591e;
+      --mdc-snackbar-container-color: #2e7d32;
     }
     &.snackbar-error {
       --mdc-snackbar-container-color: #f44336;
@@ -43,4 +43,19 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .login-dialog-panel .mat-mdc-dialog-container {
   padding: 0 !important;
+}
+
+.leave-page-dialog-backdrop {
+  background: transparent !important;
+}
+
+.leave-page-dialog-panel .mat-mdc-dialog-surface {
+  background: white !important;
+  padding: 0 1rem !important;
+  border-radius: 0 0.7rem 0 0.7rem !important;
+
+}
+
+.leave-page-dialog-panel .mat-mdc-dialog-container {
+  padding: 0rem !important;
 }

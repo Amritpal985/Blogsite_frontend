@@ -12,6 +12,7 @@ import { CustomDialogComponent } from '../custom-dialog/custom-dialog.component'
 import { lastValueFrom } from 'rxjs';
 import { Constants } from '../../constants';
 import { MatIconModule } from '@angular/material/icon';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-add-post',
@@ -35,9 +36,10 @@ export class AddPostComponent implements OnInit, OnDestroy {
   editor!: Editor;
   private fb = inject(FormBuilder);
   private dialog = inject(MatDialog);
+  private _http = inject(HttpClient);
   form!: FormGroup;
 
-  selectOptions = ['first', 'second', 'third', 'fourth', 'fifth'];
+  selectOptions = ['Health', 'Art', 'Culture', 'Entertainment'];
 
   ngOnInit(): void {
     this.editor = new Editor();
@@ -67,8 +69,11 @@ export class AddPostComponent implements OnInit, OnDestroy {
         title: Constants.UNSAVED_DATA_WARNING_TITLE,
         message: Constants.UNSAVED_DATA_WARNING_MSG,
       },
+      panelClass: 'leave-page-dialog-panel',
+      backdropClass: 'leave-page-dialog-backdrop',
     });
-    return await lastValueFrom(dialogRef.afterClosed());
+    const value = await lastValueFrom(dialogRef.afterClosed());
+    return value === true;
   }
 
   removeTag(tag: string) {
@@ -78,7 +83,19 @@ export class AddPostComponent implements OnInit, OnDestroy {
   }
 
   savePost() {
-    console.log(this.form.value);
+    const data = {
+      title: this.form.get('title')?.value,
+      content: this.form.get('content')?.value,
+      tag: this.form.get('tags')?.value.join(','),
+    };
+    this._http.post(Constants.CREATE_POST, data).subscribe(
+      (res) => {
+        console.log(res);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 
   ngOnDestroy(): void {

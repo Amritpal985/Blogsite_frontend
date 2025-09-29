@@ -6,6 +6,8 @@ import { RouterModule } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { LoginService } from '../../services/login/login.service';
 import { LoginComponent } from '../login/login.component';
+import { PopupService } from '../../services/popup/popup.service';
+import { Constants } from '../../constants';
 
 @Component({
   selector: 'app-navbar',
@@ -18,6 +20,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private loginService = inject(LoginService);
   private dialog = inject(MatDialog);
+  private popupService = inject(PopupService);
 
   isLoggedIn = false;
 
@@ -45,6 +48,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
    */
   logout() {
     this.loginService.logoutUser();
+    this.popupService.showAlertMessage(Constants.LOGOUT_MSG, Constants.SNACKBAR_SUCCESS);
   }
 
   ngOnDestroy(): void {

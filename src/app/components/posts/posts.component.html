@@ -1,3 +1,4 @@
+<app-spinner [isLoading]="isLoading"></app-spinner>
 <div id="parent d-flex">
   <div id="top"></div>
   <div id="content" class="mt-4 d-flex flex-column">
@@ -35,7 +36,7 @@
             <button mat-button>
               <mat-icon>thumb_up</mat-icon>
             </button>
-            <button mat-button>
+            <button mat-button (click)="openPost(post.id)">
               <mat-icon>open_in_new</mat-icon>
             </button>
           </div>

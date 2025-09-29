@@ -3,13 +3,16 @@ export class Constants {
   public static readonly CREATE_USER = 'http://localhost:8000/users/signup';
   public static readonly LOGIN_USER = 'http://localhost:8000/users/login';
   public static readonly ALL_POSTS = 'http://localhost:8000/posts';
+  public static readonly GET_POST = 'http://localhost:8000/posts';
+  public static readonly CREATE_POST = 'http://localhost:8000/posts/create_posts';
 
   // messages
-  public static readonly LOGIN_MSG = 'User LoggedIn Successfully.';
+  public static readonly LOGIN_MSG = 'Login successful! Welcome back.';
+  public static readonly LOGOUT_MSG = 'Logout successful. See you again!';
   public static readonly USER_CREATED_MSG = 'User created Successfully.';
   public static readonly PASSWORDS_MISMATCH_MSG = 'Passwords do not match.';
   public static readonly INVALID_FORM_MSG = 'Some fields are invalid.';
-  public static readonly GENERIC_MSG = 'Something error has occurred. Please try again.';
+  public static readonly GENERIC_MSG = 'Some error has occurred. Please try again.';
 
   // *********unsaved-data-warning*********
   public static readonly UNSAVED_DATA_WARNING_TITLE = 'Unsaved Changes.';

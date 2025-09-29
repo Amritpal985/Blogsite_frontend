@@ -6,7 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Constants } from '../../constants';
 import { PopupService } from '../../services/popup/popup.service';
@@ -25,7 +25,6 @@ import { MatDialogRef } from '@angular/material/dialog';
     MatCardModule,
     MatInputModule,
     MatButtonModule,
-    HttpClientModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',

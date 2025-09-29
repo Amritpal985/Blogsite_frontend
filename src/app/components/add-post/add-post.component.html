@@ -1,53 +1,53 @@
 <div id="parent" class="d-flex flex-column">
-    <div class="instructions-container my-4 py-2">
-        <div class="instructions px-2">
-            <h3>Important Instructions</h3>
-            <ul>
-                <li>Write thoughtfully, be respectful, and avoid harmful language.</li>
-                <li>Add relevant tags to help your post get discovered.</li>
-                <li>Upload high-quality images (max 2MB).</li>
-                <li>Respect others’ opinions, no spam or offensive content.</li>
-            </ul>
+  <div class="instructions-container my-4 py-2">
+    <div class="instructions px-2">
+      <h3>Important Instructions</h3>
+      <ul>
+        <li>Write thoughtfully, be respectful, and avoid harmful language.</li>
+        <li>Add relevant tags to help your post get discovered.</li>
+        <li>Upload high-quality images (max 2MB).</li>
+        <li>Respect others’ opinions, no spam or offensive content.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="container d-flex flex-column">
+    <form [formGroup]="form">
+      <div class="title">
+        <mat-form-field class="w-100">
+          <mat-label>Enter title here...</mat-label>
+          <input type="text" matInput formControlName="title" />
+        </mat-form-field>
+      </div>
+      <div class="content my-5">
+        <div class="NgxEditor__Wrapper">
+          <ngx-editor-menu [editor]="editor"> </ngx-editor-menu>
+          <ngx-editor [editor]="editor" [disabled]="false" formControlName="content"></ngx-editor>
         </div>
-    </div>
-    <div class="container d-flex flex-column">
-        <form [formGroup]="form">
-            <div class="title">
-                <mat-form-field class="w-100">
-                    <mat-label>Enter title here...</mat-label>
-                    <input type="text" matInput formControlName="title">
-                </mat-form-field>
-            </div>
-            <div class="content my-5">
-                <div class="NgxEditor__Wrapper">
-                    <ngx-editor-menu [editor]="editor"> </ngx-editor-menu>
-                    <ngx-editor [editor]="editor" [disabled]="false" formControlName="content"></ngx-editor>
-                </div>
-            </div>
-            <div class="tags">
-                <mat-form-field class="w-100">
-                    <mat-label>Tags</mat-label>
-                    <mat-select multiple formControlName="tags">
-                        <mat-select-trigger>
-                            <mat-chip-set>
-                                @for(tag of form.value.tags; track tag) {
-                                    <mat-chip (removed)="removeTag(tag)"> 
-                                        {{tag}}
-                                        <button matChipRemove >
-                                            <mat-icon>cancel</mat-icon>
-                                        </button>
-                                     </mat-chip>
-                                }
-                            </mat-chip-set>
-                        </mat-select-trigger>
+      </div>
+      <div class="tags">
+        <mat-form-field class="w-100">
+          <mat-label>Tags</mat-label>
+          <mat-select multiple formControlName="tags">
+            <mat-select-trigger>
+              <mat-chip-set>
+                @for (tag of form.value.tags; track tag) {
+                  <mat-chip (removed)="removeTag(tag)">
+                    {{ tag }}
+                    <button matChipRemove>
+                      <mat-icon>cancel</mat-icon>
+                    </button>
+                  </mat-chip>
+                }
+              </mat-chip-set>
+            </mat-select-trigger>
 
-                        @for( option of selectOptions; track option) {
-                            <mat-option  [value]="option"> {{option}} </mat-option>
-                        }
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <button mat-raised-button (click)="savePost()" class="mt-4">Post</button>
-        </form>
-    </div>
+            @for (option of selectOptions; track option) {
+              <mat-option [value]="option"> {{ option }} </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <button mat-raised-button (click)="savePost()" class="mt-4">Post</button>
+    </form>
+  </div>
 </div>

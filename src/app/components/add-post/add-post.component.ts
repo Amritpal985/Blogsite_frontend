@@ -13,6 +13,7 @@ import { lastValueFrom } from 'rxjs';
 import { Constants } from '../../constants';
 import { MatIconModule } from '@angular/material/icon';
 import { HttpClient } from '@angular/common/http';
+import { PopupService } from '../../services/popup/popup.service';
 
 @Component({
   selector: 'app-add-post',
@@ -37,9 +38,23 @@ export class AddPostComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private dialog = inject(MatDialog);
   private _http = inject(HttpClient);
+  private popupService = inject(PopupService);
+
   form!: FormGroup;
 
-  selectOptions = ['Health', 'Art', 'Culture', 'Entertainment'];
+  selectOptions = [
+    'Lifestyle',
+    'Travel',
+    'Health & Wellness',
+    'Technology',
+    'Business',
+    'Food',
+    'Personal Development',
+    'Art & Crafts',
+    'Fashion & Beauty',
+    'Reviews',
+    'Other',
+  ];
 
   ngOnInit(): void {
     this.editor = new Editor();
@@ -47,6 +62,7 @@ export class AddPostComponent implements OnInit, OnDestroy {
       title: [''],
       content: [''],
       tags: [[]],
+      image: [null],
     });
   }
 
@@ -82,18 +98,30 @@ export class AddPostComponent implements OnInit, OnDestroy {
     });
   }
 
+  onFileChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length) {
+      const file = input.files[0];
+      this.form.patchValue({ image: file });
+    }
+  }
+
   savePost() {
-    const data = {
-      title: this.form.get('title')?.value,
-      content: this.form.get('content')?.value,
-      tag: this.form.get('tags')?.value.join(','),
-    };
-    this._http.post(Constants.CREATE_POST, data).subscribe(
-      (res) => {
-        console.log(res);
+    const formData = new FormData();
+    formData.append('title', this.form.get('title')?.value);
+    formData.append('content', this.form.get('content')?.value);
+    formData.append('tag', this.form.get('tags')?.value);
+    formData.append('image', this.form.get('image')?.value);
+    this._http.post(Constants.CREATE_POST, formData).subscribe(
+      (res: any) => {
+        this.form.reset();
+        this.popupService.showAlertMessage(
+          res?.message || Constants.POST_CREATED_MSG,
+          Constants.SNACKBAR_SUCCESS
+        );
       },
-      (err) => {
-        console.log(err);
+      () => {
+        this.popupService.showAlertMessage(Constants.GENERIC_MSG, Constants.SNACKBAR_ERROR);
       }
     );
   }

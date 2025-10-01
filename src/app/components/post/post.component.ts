@@ -6,6 +6,7 @@ import { Constants } from '../../constants';
 import { CommonModule } from '@angular/common';
 import { MatChipsModule } from '@angular/material/chips';
 import { SpinnerComponent } from '../spinner/spinner.component';
+import { PopupService } from '../../services/popup/popup.service';
 
 @Component({
   selector: 'app-post',
@@ -17,6 +18,7 @@ import { SpinnerComponent } from '../spinner/spinner.component';
 export class PostComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private _http = inject(HttpClient);
+  private popupService = inject(PopupService);
 
   isLoading = false;
   postId: string | null = null;
@@ -28,12 +30,16 @@ export class PostComponent implements OnInit {
       this.postId = params.get('id');
     });
     const url = `${Constants.GET_POST}/${this.postId}`;
-    this._http.get<Post[]>(url).subscribe((res) => {
-      this.post = res[0];
-      // let sometags = ['Health', 'Culture', 'Art'," Technology", 'Wsjgfjdgfysi']
-      this.post = { ...this.post, formatted_tags: this.post.tag.split(',') };
-      // this.post = {...this.post, formatted_tags: sometags}
-      this.isLoading = false;
-    });
+    this._http.get<Post>(url).subscribe(
+      (res) => {
+        this.post = res;
+        this.post = { ...this.post, formatted_tags: this.post?.tags?.split(',') };
+        this.isLoading = false;
+      },
+      () => {
+        this.isLoading = false;
+        this.popupService.showAlertMessage(Constants.GENERIC_MSG, Constants.SNACKBAR_ERROR);
+      }
+    );
   }
 }

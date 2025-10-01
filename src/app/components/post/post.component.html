@@ -1,9 +1,9 @@
 <app-spinner [isLoading]="isLoading"></app-spinner>
-<div class="parent row" *ngIf="post">
+<div class="parent row" *ngIf="post && !isLoading">
   <div class="post-container col-9">
     <div class="post-title pt-3">{{ post.title }}</div>
     <div class="post-submitted-by p-1 ps-3">
-      Submitted by {{ post.author }} at {{ post.created_at | date: 'medium' }}
+      Submitted by {{ post.author.username }} at {{ post.created_at | date: 'medium' }}
     </div>
     <div class="post-content mt-5 mb-5">
       <img src="../../../assets/posts-home-bg.jpg" alt="" class="img-fluid" />

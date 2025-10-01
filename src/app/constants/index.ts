@@ -13,6 +13,7 @@ export class Constants {
   public static readonly PASSWORDS_MISMATCH_MSG = 'Passwords do not match.';
   public static readonly INVALID_FORM_MSG = 'Some fields are invalid.';
   public static readonly GENERIC_MSG = 'Some error has occurred. Please try again.';
+  public static readonly POST_CREATED_MSG = 'Post created Successfully.';
 
   // *********unsaved-data-warning*********
   public static readonly UNSAVED_DATA_WARNING_TITLE = 'Unsaved Changes.';

@@ -18,6 +18,9 @@
           <input type="text" matInput formControlName="title" />
         </mat-form-field>
       </div>
+      <div>
+        <input type="file" (change)="onFileChange($event)" />
+      </div>
       <div class="content my-5">
         <div class="NgxEditor__Wrapper">
           <ngx-editor-menu [editor]="editor"> </ngx-editor-menu>

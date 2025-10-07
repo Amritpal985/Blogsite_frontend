@@ -7,15 +7,26 @@ import { CommonModule } from '@angular/common';
 import { MatChipsModule } from '@angular/material/chips';
 import { SpinnerComponent } from '../spinner/spinner.component';
 import { PopupService } from '../../services/popup/popup.service';
+import { Editor, NgxEditorModule } from 'ngx-editor';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import DOMPurify from 'dompurify';
 
 @Component({
   selector: 'app-post',
   standalone: true,
-  imports: [CommonModule, MatChipsModule, SpinnerComponent],
+  imports: [
+    CommonModule,
+    MatChipsModule,
+    SpinnerComponent,
+    NgxEditorModule,
+    ReactiveFormsModule,
+    FormsModule,
+  ],
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss',
 })
 export class PostComponent implements OnInit {
+  editor!: Editor;
   private route = inject(ActivatedRoute);
   private _http = inject(HttpClient);
   private popupService = inject(PopupService);
@@ -25,6 +36,7 @@ export class PostComponent implements OnInit {
   post!: Post;
 
   ngOnInit(): void {
+    this.editor = new Editor();
     this.isLoading = true;
     this.route.paramMap.subscribe((params) => {
       this.postId = params.get('id');
@@ -33,7 +45,13 @@ export class PostComponent implements OnInit {
     this._http.get<Post>(url).subscribe(
       (res) => {
         this.post = res;
-        this.post = { ...this.post, formatted_tags: this.post?.tags?.split(',') };
+        this.post = {
+          ...this.post,
+          formatted_tags: this.post?.tags?.split(','),
+          content: DOMPurify.sanitize(this.post.content, {
+            ALLOWED_TAGS: ['b', 'i', 'a', 'ul', 'li'],
+          }),
+        };
         this.isLoading = false;
       },
       () => {

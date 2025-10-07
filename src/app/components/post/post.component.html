@@ -7,7 +7,11 @@
     </div>
     <div class="post-content mt-5 mb-5">
       <img src="../../../assets/posts-home-bg.jpg" alt="" class="img-fluid" />
-      <p class="mt-4">{{ post.content }}</p>
+      <!-- <p class="mt-4">{{ post.content }}</p> -->
+      <div class="NgxEditor__Wrapper mt-2">
+          <!-- <ngx-editor-menu [editor]="editor"> </ngx-editor-menu> -->
+          <ngx-editor [editor]="editor" [disabled]="true" [(ngModel)]="post.content"></ngx-editor>
+      </div>
     </div>
   </div>
   <div class="side-content-container col-3">

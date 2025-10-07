@@ -13,6 +13,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { SpinnerComponent } from '../spinner/spinner.component';
+import DOMPurify from 'dompurify';
 
 @Component({
   selector: 'app-posts',
@@ -45,7 +46,14 @@ export class PostsComponent implements OnInit {
     this.isLoading = true;
     this._http.get<Post[]>(Constants.ALL_POSTS, { headers }).subscribe(
       (res) => {
-        this.allPosts = res;
+        this.allPosts = res.map((post) => {
+          return {
+            ...post,
+            content: DOMPurify.sanitize(post.content, {
+              ALLOWED_TAGS: ['b', 'i', 'a', 'ul', 'li'],
+            }),
+          };
+        });
         this.isLoading = false;
       },
       (err) => {

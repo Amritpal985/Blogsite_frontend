@@ -1,0 +1,69 @@
+<!-- add-comment -->
+<nz-comment>
+  <nz-comment-content>
+    <nz-form-item>
+      <textarea
+        [(ngModel)]="commentText"
+        nz-input
+        rows="4"
+        [placeholder]="commentAreaPlaceholder"
+        [disabled]="!isUserLoggedIn"
+      ></textarea>
+    </nz-form-item>
+    <nz-form-item>
+      <button
+        nz-button
+        nzType="primary"
+        [nzLoading]="submitting"
+        [disabled]="!commentText || !isUserLoggedIn"
+        (click)="submitComment()"
+      >
+        Add Comment
+      </button>
+    </nz-form-item>
+  </nz-comment-content>
+</nz-comment>
+
+<!-- list of comments -->
+<nz-list [nzDataSource]="comments" [nzRenderItem]="item" [nzItemLayout]="'horizontal'"></nz-list>
+
+<ng-template #item let-item>
+  <ng-container *ngTemplateOutlet="commentTemplateRef; context: { comment: item }"> </ng-container>
+</ng-template>
+
+<!-- comments nesting -->
+<ng-template #commentTemplateRef let-comment="comment">
+  <nz-comment [nzAuthor]="comment.author_name">
+    <nz-avatar nz-comment-avatar [nzSrc]="avatar"></nz-avatar>
+    <nz-comment-content>
+      <p>{{ comment.content }}</p>
+    </nz-comment-content>
+    <nz-comment-action>
+      <span (click)="toggleReply(comment.id)">Reply</span>
+    </nz-comment-action>
+
+    @if (replyingToId === comment.id) {
+      <div style="margin-top: 8px">
+        <textarea nz-input [(ngModel)]="replyText" [rows]="2" placeholder="Write a reply...">
+        </textarea>
+        <div style="margin-top: 8px">
+          <button nz-button nzType="primary" size="small" (click)="submitReply(comment)">
+            Submit
+          </button>
+          <button nz-button size="small" style="margin-left: 8px" (click)="cancelReply()">
+            Cancel
+          </button>
+        </div>
+      </div>
+    }
+
+    @if (comment.children && comment.children.length) {
+      @for (child of comment.children; track child) {
+        <ng-template
+          [ngTemplateOutlet]="commentTemplateRef"
+          [ngTemplateOutletContext]="{ comment: child }"
+        />
+      }
+    }
+  </nz-comment>
+</ng-template>

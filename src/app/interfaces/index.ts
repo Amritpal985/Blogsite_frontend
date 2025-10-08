@@ -15,7 +15,19 @@ export interface Post {
     id: number;
     username: string;
   };
-  image?: string;
-  likes_count?: number;
+  image?: string | null;
+  like_count?: number;
   comments_count?: number;
+}
+
+export interface CommentNode {
+  id: number;
+  author_name: string;
+  content: string;
+  children?: CommentNode[];
+}
+
+export interface CommentResponse {
+  message: string;
+  comment: CommentNode;
 }

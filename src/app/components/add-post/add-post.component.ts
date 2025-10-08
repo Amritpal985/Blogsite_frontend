@@ -113,7 +113,7 @@ export class AddPostComponent implements OnInit, OnDestroy {
     formData.append('tag', this.form.get('tags')?.value);
     formData.append('image', this.form.get('image')?.value);
     this._http.post(Constants.CREATE_POST, formData).subscribe(
-      (res: any) => {
+      (res: any) => { // eslint-disable-line
         this.form.reset();
         this.popupService.showAlertMessage(
           res?.message || Constants.POST_CREATED_MSG,

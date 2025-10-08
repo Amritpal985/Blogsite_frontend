@@ -10,6 +10,7 @@ import { PopupService } from '../../services/popup/popup.service';
 import { Editor, NgxEditorModule } from 'ngx-editor';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import DOMPurify from 'dompurify';
+import { CommentComponent } from '../comment/comment.component';
 
 @Component({
   selector: 'app-post',
@@ -21,6 +22,7 @@ import DOMPurify from 'dompurify';
     NgxEditorModule,
     ReactiveFormsModule,
     FormsModule,
+    CommentComponent,
   ],
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss',

@@ -14,6 +14,7 @@ export class Constants {
   public static readonly INVALID_FORM_MSG = 'Some fields are invalid.';
   public static readonly GENERIC_MSG = 'Some error has occurred. Please try again.';
   public static readonly POST_CREATED_MSG = 'Post created Successfully.';
+  public static readonly USER_NOT_LOGGED_IN = 'You are not logged in. Please log in to continue.';
 
   // *********unsaved-data-warning*********
   public static readonly UNSAVED_DATA_WARNING_TITLE = 'Unsaved Changes.';

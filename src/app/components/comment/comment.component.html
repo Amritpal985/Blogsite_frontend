@@ -1,3 +1,36 @@
+<!-- add-comment -->
+<nz-comment>
+  <nz-comment-content>
+    <nz-form-item>
+      <textarea
+        [(ngModel)]="commentText"
+        nz-input
+        rows="4"
+        [placeholder]="commentAreaPlaceholder"
+      ></textarea>
+    </nz-form-item>
+    <nz-form-item>
+      <button
+        nz-button
+        nzType="primary"
+        [nzLoading]="submitting"
+        [disabled]="!commentText || !isUserLoggedIn"
+        (click)="submitComment()"
+      >
+        Add Comment
+      </button>
+    </nz-form-item>
+  </nz-comment-content>
+</nz-comment>
+
+<!-- list of comments -->
+<nz-list [nzDataSource]="data" [nzRenderItem]="item" [nzItemLayout]="'horizontal'"></nz-list>
+
+<ng-template #item let-item>
+  <ng-container *ngTemplateOutlet="commentTemplateRef; context: { comment: item }"> </ng-container>
+</ng-template>
+
+<!-- comments nesting -->
 <ng-template #commentTemplateRef let-comment="comment">
   <nz-comment [nzAuthor]="comment.author">
     <nz-avatar nz-comment-avatar [nzSrc]="avatar"></nz-avatar>
@@ -33,8 +66,3 @@
     }
   </nz-comment>
 </ng-template>
-
-<ng-template
-  [ngTemplateOutlet]="commentTemplateRef"
-  [ngTemplateOutletContext]="{ comment: data }"
-></ng-template>

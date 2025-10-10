@@ -22,7 +22,12 @@ export interface Post {
 
 export interface CommentNode {
   id: number;
-  author: string;
+  author_name: string;
   content: string;
   children?: CommentNode[];
+}
+
+export interface CommentResponse {
+  message: string;
+  comment: CommentNode;
 }

@@ -5,6 +5,9 @@ export class Constants {
   public static readonly ALL_POSTS = 'http://localhost:8000/posts';
   public static readonly GET_POST = 'http://localhost:8000/posts';
   public static readonly CREATE_POST = 'http://localhost:8000/posts/create_posts';
+  public static readonly GET_COMMENTS = 'http://localhost:8000/comments';
+  public static readonly ADD_COMMENT = 'http://localhost:8000/comments';
+  public static readonly REPLY_TO_COMMENT = 'http://localhost:8000/comments/reply';
 
   // messages
   public static readonly LOGIN_MSG = 'Login successful! Welcome back.';

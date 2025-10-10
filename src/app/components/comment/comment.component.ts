@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
@@ -8,12 +8,13 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { CommentNode } from '../../interfaces';
+import { CommentNode, CommentResponse } from '../../interfaces';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { LoginService } from '../../services/login/login.service';
 import { PopupService } from '../../services/popup/popup.service';
 import { Constants } from '../../constants';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-comment',
@@ -34,8 +35,11 @@ import { Constants } from '../../constants';
   styleUrl: './comment.component.scss',
 })
 export class CommentComponent implements OnInit {
+  @Input() postId!: number;
+
   private loginService = inject(LoginService);
   private popupService = inject(PopupService);
+  private _http = inject(HttpClient);
 
   avatar = '/assets/comment-avatar.png';
   commentText = '';
@@ -43,38 +47,21 @@ export class CommentComponent implements OnInit {
   isUserLoggedIn = false;
   commentAreaPlaceholder = 'please login to add or reply a comment...';
 
-  data: CommentNode[] = [
-    {
-      id: 1,
-      author: 'NK',
-      content: 'Parent',
-      children: [
-        {
-          id: 2,
-          author: 'AS',
-          content: 'Child',
-          children: [
-            {
-              id: 3,
-              author: 'NK',
-              content: 'Sub-child-1',
-            },
-            {
-              id: 4,
-              author: 'NK',
-              content: 'Sub-child-2',
-            },
-          ],
-        },
-      ],
-    },
-  ];
+  comments: CommentNode[] = [];
 
   replyingToId: number | null = null;
   replyText = '';
-  ids = 10;
 
   ngOnInit(): void {
+    const url = `${Constants.GET_COMMENTS}/${this.postId}`;
+    this._http.get<CommentNode[]>(url).subscribe(
+      (res) => {
+        this.comments = res;
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
     // localStorage.setItem("token","dakdbds");
     this.isUserLoggedIn = this.loginService.isUserLoggedIn();
     if (this.isUserLoggedIn) this.commentAreaPlaceholder = 'write a comment...';
@@ -90,18 +77,26 @@ export class CommentComponent implements OnInit {
     }
     this.submitting = true;
     const content = this.commentText;
-    this.commentText = '';
-    this.ids++;
-    this.submitting = false;
-    this.data = [
-      ...this.data,
-      {
-        id: this.ids,
-        author: 'you',
-        content,
+    const url = `${Constants.ADD_COMMENT}/${this.postId}`;
+    this._http.post<CommentResponse>(url, { content }).subscribe(
+      (res) => {
+        this.commentText = '';
+        this.comments = [
+          ...this.comments,
+          {
+            id: res.comment.id,
+            author_name: res.comment.author_name,
+            content,
+          },
+        ];
+        this.submitting = false;
+        this.popupService.showAlertMessage(res.message, Constants.SNACKBAR_SUCCESS);
       },
-    ];
-    this.submitting = false;
+      (err) => {
+        console.log(err);
+        this.submitting = false;
+      }
+    );
   }
 
   /**
@@ -132,21 +127,29 @@ export class CommentComponent implements OnInit {
    * @returns void.
    */
   submitReply(parent: CommentNode): void {
-    const text = this.replyText.trim();
-    if (!text) return;
-    const newReply: CommentNode = {
-      id: this.ids++,
-      author: 'You',
-      content: text,
-      children: [],
-    };
+    const content = this.replyText.trim();
+    if (!content) return;
 
-    if (!parent.children) {
-      parent.children = [];
-    }
-
-    parent.children.push(newReply);
-    this.replyingToId = null;
-    this.replyText = '';
+    const url = `${Constants.REPLY_TO_COMMENT}/${parent.id}`;
+    this._http.post<CommentResponse>(url, { content }).subscribe(
+      (res) => {
+        const reply: CommentNode = {
+          id: res.comment.id,
+          author_name: res.comment.author_name,
+          content,
+          children: [],
+        };
+        if (!parent.children) {
+          parent.children = [];
+        }
+        parent.children.push(reply);
+        this.replyingToId = null;
+        this.replyText = '';
+        this.popupService.showAlertMessage(res.message, Constants.SNACKBAR_SUCCESS);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 }

@@ -1,21 +1,75 @@
-.parent {
-    margin: auto;
+.container-fluid {
+  padding: 2rem;
 }
 
-.post-container {
-    margin-top: 6rem;
+.post-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
 }
 
-.post-title{
-    font-size: 2rem;
-    min-height: 5rem;
+.post-submitted-by {
+  background-color: #f1f1f1;
+  border-left: 4px solid #007bff;
+  padding: 0.75rem 1rem;
+  border-radius: 0.25rem;
+  font-size: 0.95rem;
+  color: #555;
 }
 
-.post-submitted-by, .updated-date {
-    background-color: rgb(210, 206, 206);
-    border-radius: 0.3rem;
+.post-content img {
+  width: 100%;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
 }
 
-.side-content-container {
-    margin-top: 10rem;
+.NgxEditor__Wrapper {
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+  padding: 1rem;
+  background-color: #fff;
+  min-height: 10rem;
+}
+
+.side-box {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  margin-top: 4rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.75rem;
+}
+
+.tag-chips mat-chip {
+  background-color: #e0e0e0;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.updated-date {
+  background-color: #e9ecef;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.25rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.recent-posts li {
+  margin-bottom: 0.5rem;
+}
+
+.recent-posts a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.recent-posts a:hover {
+  text-decoration: underline;
 }

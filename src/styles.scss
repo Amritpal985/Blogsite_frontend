@@ -4,15 +4,24 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .mat-mdc-snack-bar-container {
-    &.snackbar-success {
-      --mdc-snackbar-container-color: #2e7d32;
-    }
-    &.snackbar-error {
-      --mdc-snackbar-container-color: #f44336;
-    }
-    &.snackbar-warning {
-      --mdc-snackbar-container-color: #8b5605;
-    }
+  &.snackbar-success {
+    --mdc-snackbar-container-color: #22c55e;
+  }
+  &.snackbar-error {
+    --mdc-snackbar-container-color: #ef4444;
+  }
+  &.snackbar-warning {
+    --mdc-snackbar-container-color: #f59e0b;
+  }
+
+  color: #fff;
+  font-weight: 500;
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+
+  .mdc-button__label {
+    color: #fff;
+  }
 }
 
 // .mdc-text-field--filled:not(.mdc-text-field--disabled)  {

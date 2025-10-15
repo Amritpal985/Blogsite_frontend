@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
@@ -15,6 +15,7 @@ import { LoginService } from '../../services/login/login.service';
 import { PopupService } from '../../services/popup/popup.service';
 import { Constants } from '../../constants';
 import { HttpClient } from '@angular/common/http';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-comment',
@@ -34,13 +35,14 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './comment.component.html',
   styleUrl: './comment.component.scss',
 })
-export class CommentComponent implements OnInit {
+export class CommentComponent implements OnInit, OnDestroy {
   @Input() postId!: number;
 
   private loginService = inject(LoginService);
   private popupService = inject(PopupService);
   private _http = inject(HttpClient);
 
+  private destroy$ = new Subject<void>();
   avatar = '/assets/comment-avatar.png';
   commentText = '';
   submitting = false;
@@ -63,8 +65,19 @@ export class CommentComponent implements OnInit {
       }
     );
     // localStorage.setItem("token","dakdbds");
-    this.isUserLoggedIn = this.loginService.isUserLoggedIn();
-    if (this.isUserLoggedIn) this.commentAreaPlaceholder = 'write a comment...';
+    this.loginService.loginSubject$
+      .asObservable()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.isUserLoggedIn = this.loginService.isUserLoggedIn();
+        this.commentAreaPlaceholder = this.isUserLoggedIn
+          ? 'write a comment...'
+          : 'please login to add or reply a comment...';
+        if (!this.isUserLoggedIn) {
+          this.replyingToId = null;
+          this.replyText = '';
+        }
+      });
   }
 
   /**
@@ -151,5 +164,10 @@ export class CommentComponent implements OnInit {
         console.log(err);
       }
     );
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

@@ -80,7 +80,6 @@ export class LoginComponent implements OnInit {
             this.loginService.loginUser(res.access_token);
             this.popupService.showAlertMessage(Constants.LOGIN_MSG, Constants.SNACKBAR_SUCCESS);
             this.dialogRef.close();
-            this.router.navigate(['']);
             this.loginService.loginSubject$.next(true);
           },
           (error) => {

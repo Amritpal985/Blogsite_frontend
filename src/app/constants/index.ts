@@ -10,7 +10,7 @@ export class Constants {
   public static readonly REPLY_TO_COMMENT = 'http://localhost:8000/comments/reply';
 
   // messages
-  public static readonly LOGIN_MSG = 'Login successful! Welcome back.';
+  public static readonly LOGIN_MSG = 'Login successful. Welcome back.';
   public static readonly LOGOUT_MSG = 'Logout successful. See you again!';
   public static readonly USER_CREATED_MSG = 'User created Successfully.';
   public static readonly PASSWORDS_MISMATCH_MSG = 'Passwords do not match.';

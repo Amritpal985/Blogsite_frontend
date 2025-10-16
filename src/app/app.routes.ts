@@ -4,6 +4,7 @@ import { PostsComponent } from './components/posts/posts.component';
 import { AddPostComponent } from './components/add-post/add-post.component';
 import { authGuard, pageLeaveCheck } from './guards/auth.guard';
 import { PostComponent } from './components/post/post.component';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
 
 export const routes: Routes = [
   {
@@ -27,5 +28,10 @@ export const routes: Routes = [
     path: 'post/:id',
     pathMatch: 'full',
     component: PostComponent,
+  },
+  {
+    path: 'user-profile',
+    pathMatch: 'full',
+    component: UserProfileComponent,
   },
 ];

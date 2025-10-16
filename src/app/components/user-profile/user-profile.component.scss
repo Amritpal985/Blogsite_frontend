@@ -1,0 +1,87 @@
+.profile-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: #fff;
+  border-radius: 12px;
+  flex-wrap: wrap;
+}
+
+.avatar {
+  width: 12rem;
+  height: 12rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.header-details {
+  flex: 1;
+  min-width: 250px;
+}
+
+.header-details h2 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.email {
+  color: #777;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 0.5rem;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.update-profile-form {
+  width: 80%;
+  margin: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+}
+
+.update-profile-form form {
+    margin: 1rem auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+
+.chat-card {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.chat-message {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+@media (max-width: 600px) {
+  .avatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  .profile-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header-details {
+    align-items: center;
+  }
+}

@@ -76,6 +76,10 @@ a.login_icons:hover {
         justify-content: flex-start;
     }
 
+    a.login_icons:hover {
+        transform: none;
+    }
+
     .navbar-collapse {
         background-color: rgba(255, 255, 255, 0.5);
         padding: 1rem;

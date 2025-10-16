@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Post } from '../../interfaces';
+import { GetAllPostResponse, Post } from '../../interfaces';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Constants } from '../../constants';
 import { MatCardModule } from '@angular/material/card';
@@ -38,15 +38,29 @@ export class PostsComponent implements OnInit {
 
   isLoading = false;
   allPosts: Post[] = [];
+  totalPosts = 0;
+
+  page_number = 1;
+  readonly page_size = 2;
 
   ngOnInit(): void {
+    // this.allPosts = mockData;
+    this.page_number = 1;
+    this.fetchPosts(this.page_number);
+  }
+
+  /**
+   * It fetches posts.
+   * @param page_number of current page.
+   */
+  fetchPosts(page_number: number) {
+    this.isLoading = true;
     let headers: HttpHeaders = new HttpHeaders();
     headers = headers.set('Authorization', `Bearer ${localStorage.getItem('token')}`);
-    // this.allPosts = mockData;
-    this.isLoading = true;
-    this._http.get<Post[]>(Constants.ALL_POSTS, { headers }).subscribe(
-      (res) => {
-        this.allPosts = res.map((post) => {
+    const url = `${Constants.ALL_POSTS}?page_number=${page_number}`;
+    this._http.get<GetAllPostResponse>(url, { headers }).subscribe(
+      (res: GetAllPostResponse) => {
+        this.allPosts = res.result.map((post) => {
           return {
             ...post,
             content: DOMPurify.sanitize(post.content, {
@@ -54,6 +68,7 @@ export class PostsComponent implements OnInit {
             }),
           };
         });
+        this.totalPosts = res.totalPosts;
         this.isLoading = false;
       },
       (err) => {
@@ -63,6 +78,24 @@ export class PostsComponent implements OnInit {
     );
   }
 
+  /**
+   * It opens previous page of posts.
+   */
+  handlePrevClick() {
+    if (this.page_number > 1) this.fetchPosts(--this.page_number);
+  }
+
+  /**
+   * It opens next page of posts.
+   */
+  handleNextClick() {
+    if (this.page_number * this.page_size <= this.totalPosts) this.fetchPosts(++this.page_number);
+  }
+
+  /**
+   * It opens a particular post.
+   * @param postId of the post.
+   */
   openPost(postId: number) {
     this.router.navigate(['/post', postId]);
   }

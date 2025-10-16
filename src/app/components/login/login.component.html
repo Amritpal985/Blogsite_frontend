@@ -43,6 +43,11 @@
             <input matInput formControlName="confirmPassword" type="password" />
           </mat-form-field>
 
+          <div class="upload-field">
+            <label for="image">Upload Image</label>
+            <input type="file" id="image" (change)="onFileSelected($event)" accept="image/*" />
+          </div>
+
           <button mat-raised-button color="primary" type="submit">SignUp</button>
         </form>
       </mat-tab>

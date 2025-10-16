@@ -31,6 +31,12 @@
         </a>
       }
 
+      <!-- @if (isLoggedIn) { -->
+        <a (click)="seeProfile()" class="login_icons">
+          <i class="fa-solid fa-user fa-2x" aria-hidden="true"></i>
+        </a>
+      <!-- } -->
+
       @if (isLoggedIn) {
         <a (click)="logout()" class="login_icons">
           <i class="fa-solid fa-sign-out fa-2x" title="Logout"></i>

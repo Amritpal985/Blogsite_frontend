@@ -1,0 +1,27 @@
+<div class="profile-container">
+  <!-- Profile Header -->
+  <mat-card class="profile-header">
+    <img class="avatar" alt="User Avatar" />
+
+    <div class="header-details">
+      <h2>{{ user.name }}</h2>
+      <p class="bio">{{ user.bio }}</p>
+      <p class="email"><mat-icon>email</mat-icon> {{ user.email }}</p>
+    </div>
+  </mat-card>
+
+  <!-- Tabs -->
+  <mat-tab-group>
+    <!-- Info Tab -->
+    <mat-tab label="Info">
+    </mat-tab>
+
+    <!-- Chats Tab -->
+    <mat-tab label="Chats">
+    </mat-tab>
+
+    <!-- Update Profile Tab -->
+    <mat-tab label="Update Profile">
+    </mat-tab>
+  </mat-tab-group>
+</div>

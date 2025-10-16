@@ -1,0 +1,43 @@
+<div id="chat-app" class="chat-wrapper mb-3 p-3">
+  <aside class="chat-sidebar mat-elevation-z3">
+    <div class="sidebar-header">
+      <h2>Chats</h2>
+    </div>
+
+    <div class="chat-list">
+      <div
+        class="chat-tile mat-elevation-z1"
+        *ngFor="let follower of followers"
+        [ngClass]="follower.id === activeChatId ? 'active' : ''"
+        (click)="onChatChange(follower.id)"
+      >
+        <div class="chat-name">{{ follower.username }}</div>
+      </div>
+    </div>
+  </aside>
+
+  <section class="chat-main">
+    <div class="chat-header mat-elevation-z2">
+      <div class="chat-user">
+        <h3>John Doe</h3>
+      </div>
+    </div>
+
+    <div class="chat-messages" #chatContainer>
+      <div
+        *ngFor="let message of chatMessages"
+        class="message mat-elevation-z1"
+        [ngClass]="message.sender_id === activeChatId ? ' received ' : 'sent'"
+      >
+        {{ message.message }}
+      </div>
+    </div>
+
+    <div class="chat-input mat-elevation-z3">
+      <input type="text" placeholder="Type a message..." [(ngModel)]="messageToSend" />
+      <button mat-icon-button class="icon-btn send-btn" color="primary" (click)="sendMessage()">
+        <mat-icon>send</mat-icon>
+      </button>
+    </div>
+  </section>
+</div>

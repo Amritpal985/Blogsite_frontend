@@ -2,7 +2,7 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { LoginService } from '../../services/login/login.service';
 import { LoginComponent } from '../login/login.component';
@@ -21,6 +21,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private loginService = inject(LoginService);
   private dialog = inject(MatDialog);
   private popupService = inject(PopupService);
+  private router = inject(Router);
 
   isLoggedIn = false;
 
@@ -44,6 +45,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Redirects to user profile page.
+   */
+  seeProfile() {
+    this.router.navigate(['/user-profile']);
+  }
+
+  /**
    * It logout the user.
    */
   logout() {
@@ -51,6 +59,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.popupService.showAlertMessage(Constants.LOGOUT_MSG, Constants.SNACKBAR_SUCCESS);
   }
 
+  /**
+   * Cleans up any pending subscriptions.
+   */
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

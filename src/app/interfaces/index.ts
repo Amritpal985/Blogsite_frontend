@@ -1,6 +1,7 @@
 export interface LoginUser {
   access_token: string;
   token_type: string;
+  user_id: string;
 }
 
 export interface Post {
@@ -20,6 +21,11 @@ export interface Post {
   comments_count?: number;
 }
 
+export interface GetAllPostResponse {
+  result: Post[];
+  totalPosts: number;
+}
+
 export interface CommentNode {
   id: number;
   author_name: string;
@@ -30,4 +36,23 @@ export interface CommentNode {
 export interface CommentResponse {
   message: string;
   comment: CommentNode;
+}
+
+export interface Follower {
+  id: number;
+  username: string;
+}
+
+export interface ChatMessage {
+  id?: number;
+  receiver_id: number;
+  sender_id?: number;
+  is_read?: boolean;
+  message: string;
+  timestamp?: string;
+}
+
+export interface Message {
+  receiver_id: number;
+  message: string;
 }

@@ -166,6 +166,9 @@ export class CommentComponent implements OnInit, OnDestroy {
     );
   }
 
+  /**
+   * Cleans up any pending subscriptions.
+   */
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

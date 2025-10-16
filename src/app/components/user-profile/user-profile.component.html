@@ -1,0 +1,51 @@
+<div class="profile-container">
+  <!-- Profile Header -->
+  <mat-card class="profile-header mt-5">
+    <img class="avatar" alt="User Avatar" src="../../../assets/user_profile_image.jpg" />
+    <div class="header-details">
+      <h2>Nishant</h2>
+      <p class="email"><mat-icon>email</mat-icon> nkgmail.com</p>
+    </div>
+  </mat-card>
+
+  <!-- Tabs -->
+  <mat-tab-group>
+    <!-- Info Tab -->
+    <mat-tab label="Info"> </mat-tab>
+
+    <!-- Chats Tab -->
+    <mat-tab label="Chats">
+      <app-chat></app-chat>
+    </mat-tab>
+
+    <!-- Update Profile Tab -->
+    <mat-tab label="Update Profile">
+      <div class="update-profile-form">
+        <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
+          <mat-form-field class="full-width">
+            <mat-label>Fullname</mat-label>
+            <input matInput formControlName="name" />
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="username" />
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" />
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <mat-label>New Password</mat-label>
+            <input matInput type="password" formControlName="newPassword" />
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <mat-label>Confirm Password</mat-label>
+            <input matInput type="password" formControlName="confirmPassword" />
+          </mat-form-field>
+
+          <button mat-raised-button color="primary mb-3" type="submit">Update Profile</button>
+        </form>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>

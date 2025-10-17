@@ -30,8 +30,8 @@ export const routes: Routes = [
     component: PostComponent,
   },
   {
-    path:'user-profile',
+    path: 'user-profile',
     pathMatch: 'full',
-    component: UserProfileComponent
-  }
+    component: UserProfileComponent,
+  },
 ];

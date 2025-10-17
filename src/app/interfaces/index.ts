@@ -31,3 +31,22 @@ export interface CommentResponse {
   message: string;
   comment: CommentNode;
 }
+
+export interface Follower {
+  id: number;
+  username: string;
+}
+
+export interface ChatMessage {
+  id: number;
+  receiver_id: number;
+  sender_id: number;
+  is_read: boolean;
+  message: string;
+  timestamp: string;
+}
+
+export interface Message {
+  receiver_id: number;
+  message: string;
+}

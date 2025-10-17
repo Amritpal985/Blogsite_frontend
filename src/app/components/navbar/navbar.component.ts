@@ -45,7 +45,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   seeProfile() {
-    this.router.navigate(['/user-profile'])
+    this.router.navigate(['/user-profile']);
   }
 
   /**

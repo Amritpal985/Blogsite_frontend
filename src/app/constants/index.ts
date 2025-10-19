@@ -11,6 +11,7 @@ export class Constants {
   public static readonly GET_ALL_FOLLOWERS = 'http://localhost:8000/follows/followers';
   public static readonly GET_CHAT_HISTORY = 'http://localhost:8000/chat/history';
   public static readonly SEND_MESSAGE_URL = 'http://localhost:8000/chat/send';
+  public static readonly WEBSOCKET_MESSAGE_URL = 'ws://localhost:8000/chat/ws';
 
   // messages
   public static readonly LOGIN_MSG = 'Login successful. Welcome back.';

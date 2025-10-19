@@ -77,7 +77,7 @@ export class LoginComponent implements OnInit {
         })
         .subscribe(
           (res: LoginUser) => {
-            this.loginService.loginUser(res.access_token);
+            this.loginService.loginUser(res.access_token, res.user_id);
             this.popupService.showAlertMessage(Constants.LOGIN_MSG, Constants.SNACKBAR_SUCCESS);
             this.dialogRef.close();
             this.loginService.loginSubject$.next(true);

@@ -1,6 +1,7 @@
 export interface LoginUser {
   access_token: string;
   token_type: string;
+  user_id: string;
 }
 
 export interface Post {
@@ -38,12 +39,12 @@ export interface Follower {
 }
 
 export interface ChatMessage {
-  id: number;
+  id?: number;
   receiver_id: number;
-  sender_id: number;
-  is_read: boolean;
+  sender_id?: number;
+  is_read?: boolean;
   message: string;
-  timestamp: string;
+  timestamp?: string;
 }
 
 export interface Message {

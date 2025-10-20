@@ -92,12 +92,20 @@ export class AddPostComponent implements OnInit, OnDestroy {
     return value === true;
   }
 
+  /**
+   * It removes a tag from the list of selected tags.
+   * @param tag to be remove.
+   */
   removeTag(tag: string) {
     this.form.patchValue({
       tags: this.form.value.tags.filter((el: string) => el !== tag),
     });
   }
 
+  /**
+   * It triggers when user changes the image chosen.
+   * @param event of file selection.
+   */
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length) {
@@ -106,6 +114,9 @@ export class AddPostComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * It prepares the data and saves a post.
+   */
   savePost() {
     const formData = new FormData();
     formData.append('title', this.form.get('title')?.value);
@@ -126,6 +137,9 @@ export class AddPostComponent implements OnInit, OnDestroy {
     );
   }
 
+  /**
+   * Cleans up everything required.
+   */
   ngOnDestroy(): void {
     this.editor.destroy();
   }

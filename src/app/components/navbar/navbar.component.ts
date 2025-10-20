@@ -44,6 +44,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Redirects to user profile page.
+   */
   seeProfile() {
     this.router.navigate(['/user-profile']);
   }
@@ -56,6 +59,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.popupService.showAlertMessage(Constants.LOGOUT_MSG, Constants.SNACKBAR_SUCCESS);
   }
 
+  /**
+   * Cleans up any pending subscriptions.
+   */
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

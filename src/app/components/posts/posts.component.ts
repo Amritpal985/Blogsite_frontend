@@ -63,6 +63,10 @@ export class PostsComponent implements OnInit {
     );
   }
 
+  /**
+   * It opens a particular post.
+   * @param postId of the post.
+   */
   openPost(postId: number) {
     this.router.navigate(['/post', postId]);
   }

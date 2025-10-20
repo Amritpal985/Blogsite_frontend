@@ -5,7 +5,7 @@ import { ChatMessage, Follower } from '../../interfaces';
 import { Constants } from '../../constants';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { WebSocketService } from '../../services/websocket.service';
+import { WebSocketService } from '../../services/websocket/websocket.service';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
@@ -44,6 +44,10 @@ export class ChatComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * It fetches history of chat messages.
+   * @param userId of the selected user.
+   */
   getChatMessages(userId: number) {
     this.chatMessages = [];
     const url = `${Constants.GET_CHAT_HISTORY}/${userId}`;
@@ -57,26 +61,26 @@ export class ChatComponent implements OnInit, OnDestroy {
     );
   }
 
+  /**
+   * It triggers when user changes the user for chat.
+   * @param id of the selected user.
+   */
   onChatChange(id: number) {
     this.activeChatId = id;
     this.getChatMessages(this.activeChatId);
   }
 
+  /**
+   * It sends message with help of a websocket.
+   */
   sendMessage() {
     const message: ChatMessage = { receiver_id: this.activeChatId, message: this.messageToSend };
-    // this._http.post<ChatMessage>(Constants.SEND_MESSAGE_URL, message).subscribe(
-    //   (res:ChatMessage) => {
-    //     res.message = this.messageToSend;
-    //     this.messageToSend = '';
-    //     this.chatMessages = [...this.chatMessages, res]
-    //   },
-    //   (err) => {
-    //     console.log(err);
-    //   }
-    // );
     this.wsService.sendMessage(message);
   }
 
+  /**
+   * Cleans up any pending subscriptions.
+   */
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

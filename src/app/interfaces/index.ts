@@ -21,6 +21,11 @@ export interface Post {
   comments_count?: number;
 }
 
+export interface GetAllPostResponse {
+  result: Post[];
+  totalPosts: number;
+}
+
 export interface CommentNode {
   id: number;
   author_name: string;

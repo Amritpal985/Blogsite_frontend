@@ -52,5 +52,29 @@
         </mat-card-actions>
       </mat-card>
     </div>
+
+    <div class="pagination-buttons d-flex justify-content-center align-items-center my-4">
+      <button
+        mat-raised-button
+        color="primary"
+        class="me-3 prev-btn"
+        (click)="handlePrevClick()"
+        [disabled]="page_number <= 1"
+      >
+        <mat-icon>chevron_left</mat-icon>
+        <span>Prev</span>
+      </button>
+
+      <button
+        mat-raised-button
+        color="primary"
+        class="next-btn"
+        (click)="handleNextClick()"
+        [disabled]="page_number * page_size > totalPosts"
+      >
+        <span>Next</span>
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
   </div>
 </div>

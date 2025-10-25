@@ -1,5 +1,13 @@
 import { HttpClient } from '@angular/common/http';
-import { AfterViewChecked, Component, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewChecked,
+  Component,
+  ElementRef,
+  inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ChatMessage, Follower } from '../../interfaces';
 import { Constants } from '../../constants';
@@ -15,11 +23,11 @@ import { Subject, takeUntil } from 'rxjs';
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss',
 })
-export class ChatComponent implements OnInit, AfterViewChecked , OnDestroy {
+export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
   private _http = inject(HttpClient);
   private wsService = inject(WebSocketService);
   private destroy$ = new Subject<void>();
-  
+
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
   followers: Follower[] = [];
@@ -49,7 +57,7 @@ export class ChatComponent implements OnInit, AfterViewChecked , OnDestroy {
   ngAfterViewChecked(): void {
     try {
       this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
-    } catch (error) {
+    } catch (error) { // eslint-disable-line
       // do nothing
     }
   }

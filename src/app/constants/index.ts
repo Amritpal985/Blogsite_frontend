@@ -2,6 +2,7 @@ export class Constants {
   // urls
   public static readonly CREATE_USER = 'http://localhost:8000/users/signup';
   public static readonly LOGIN_USER = 'http://localhost:8000/users/login';
+  public static readonly GET_USER_INFO = 'http://localhost:8000/users/me';
   public static readonly ALL_POSTS = 'http://localhost:8000/posts';
   public static readonly GET_POST = 'http://localhost:8000/posts';
   public static readonly CREATE_POST = 'http://localhost:8000/posts/create_posts';
@@ -12,6 +13,7 @@ export class Constants {
   public static readonly GET_CHAT_HISTORY = 'http://localhost:8000/chat/history';
   public static readonly SEND_MESSAGE_URL = 'http://localhost:8000/chat/send';
   public static readonly WEBSOCKET_MESSAGE_URL = 'ws://localhost:8000/chat/ws';
+  public static readonly UPDATE_USER_INFO = 'http://localhost:8000/users/update';
 
   // messages
   public static readonly LOGIN_MSG = 'Loggedin successfully. Welcome back.';
@@ -23,6 +25,7 @@ export class Constants {
   public static readonly POST_CREATED_MSG = 'Post created Successfully.';
   public static readonly USER_NOT_LOGGED_IN = 'You are not logged in. Please log in to continue.';
   public static readonly WEBSOCKET_ERROR_MSG = 'Websocket error.';
+  public static readonly USER_UPDATED_MSG = 'User updated successfully.';
 
   // *********unsaved-data-warning*********
   public static readonly UNSAVED_DATA_WARNING_TITLE = 'Unsaved Changes.';

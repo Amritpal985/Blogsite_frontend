@@ -56,3 +56,15 @@ export interface Message {
   receiver_id: number;
   message: string;
 }
+
+export interface User {
+  id: number;
+  username: string;
+  fullname: string;
+  email: string;
+  about_me: string;
+  image: string;
+  total_posts: string;
+  followers: number;
+  following: number;
+}

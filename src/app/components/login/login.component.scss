@@ -24,3 +24,49 @@
     flex-direction: column;
     gap: 0.1rem;
 }
+
+.upload-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  font-family: 'Roboto', sans-serif;
+}
+
+.upload-field label {
+  font-weight: 500;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.upload-field input[type="file"] {
+  position: relative;
+  cursor: pointer;
+  padding: 0.6rem 1rem;
+  border: 2px dashed #9e9e9e;
+  border-radius: 8px;
+  background-color: #fafafa;
+  transition: all 0.3s ease;
+  color: #555;
+}
+
+.upload-field input[type="file"]::file-selector-button {
+  background-color: #3f51b5;
+  color: #fff;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 0.8rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.upload-field input[type="file"]::file-selector-button:hover {
+  background-color: #303f9f;
+}
+
+.upload-field input[type="file"]:hover {
+  border-color: #3f51b5;
+  background-color: #f0f0ff;
+}

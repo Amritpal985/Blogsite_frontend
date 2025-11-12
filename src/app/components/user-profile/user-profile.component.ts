@@ -14,6 +14,9 @@ import { Constants } from '../../constants';
 import { LoginService } from '../../services/login/login.service';
 import { Subject, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
+import { User } from '../../interfaces';
+import { HttpClient } from '@angular/common/http';
+import { SpinnerComponent } from '../spinner/spinner.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -29,6 +32,7 @@ import { Router } from '@angular/router';
     MatInputModule,
     MatButtonModule,
     ChatComponent,
+    SpinnerComponent,
   ],
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.scss',
@@ -36,12 +40,17 @@ import { Router } from '@angular/router';
 export class UserProfileComponent implements OnInit, OnDestroy {
   private popupService = inject(PopupService);
   private loginService = inject(LoginService);
+  private _http = inject(HttpClient);
   private router = inject(Router);
   private fb = inject(FormBuilder);
   private destroy$ = new Subject<void>();
+
+  user!: User;
   profileForm!: FormGroup;
+  isLoading = false;
 
   ngOnInit() {
+    this.isLoading = true;
     this.loginService.loginSubject$
       .asObservable()
       .pipe(takeUntil(this.destroy$))
@@ -50,15 +59,38 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         if (!isUserLoggedIn) this.router.navigate(['']);
       });
     this.initializeUpdateForm();
+    this.getUserDetails();
+  }
+
+  private getUserDetails() {
+    this._http.get<User>(Constants.GET_USER_INFO).subscribe(
+      (res) => {
+        this.user = res;
+        this.updateFormValues();
+        this.isLoading = false;
+      },
+      (err) => {
+        console.log(err);
+        this.isLoading = false;
+      }
+    );
   }
 
   private initializeUpdateForm() {
     this.profileForm = this.fb.group({
-      name: ['Nishant', Validators.required],
-      username: [{ value: 'nishant', disabled: true }, Validators.required],
-      email: [{ value: 'nk@gmail.com', disabled: true }, Validators.required],
-      newPassword: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required, Validators.minLength(6)]],
+      fullname: ['', Validators.required],
+      username: [{ value: '', disabled: true }, Validators.required],
+      email: [{ value: '', disabled: true }, Validators.required],
+      newPassword: [''],
+      confirmPassword: [''],
+    });
+  }
+
+  private updateFormValues() {
+    this.profileForm.patchValue({
+      fullname: this.user.fullname,
+      username: this.user.username,
+      email: this.user.email,
     });
   }
 
@@ -76,8 +108,19 @@ export class UserProfileComponent implements OnInit, OnDestroy {
       );
       return;
     }
-    const body = this.profileForm.value;
-    console.log(body);
+
+    const formData = new FormData();
+    formData.append('fullname', this.profileForm.get('fullname')?.value);
+    const pwd = this.profileForm.get('newPassword')?.value;
+    if (pwd) formData.append('password', pwd);
+    this._http.put(Constants.UPDATE_USER_INFO, formData).subscribe(
+      () => {
+        this.popupService.showAlertMessage(Constants.USER_UPDATED_MSG, Constants.SNACKBAR_SUCCESS);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 
   ngOnDestroy(): void {

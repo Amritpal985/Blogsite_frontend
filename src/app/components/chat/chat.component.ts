@@ -39,8 +39,8 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
     this._http.get<Follower[]>(Constants.GET_ALL_FOLLOWERS).subscribe(
       (res: any) => {// eslint-disable-line
         this.followers = res.followers;
-        this.activeChatId = this.followers[0].id;
-        this.getChatMessages(this.activeChatId);
+        this.activeChatId = this.followers[0]?.id;
+        if (this.activeChatId) this.getChatMessages(this.activeChatId);
       },
       (err) => {
         console.log(err);

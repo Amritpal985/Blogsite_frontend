@@ -37,6 +37,8 @@ export class LoginComponent implements OnInit {
   private loginService = inject(LoginService);
   private dialogRef = inject(MatDialogRef<LoginComponent>);
 
+  selectedImage: File | null = null;
+
   loginForm: FormGroup = this.fb.group({
     username: ['', [Validators.required, Validators.minLength(6)]],
     password: ['', [Validators.required, Validators.minLength(6)]],
@@ -54,6 +56,13 @@ export class LoginComponent implements OnInit {
     if (this.loginService.isUserLoggedIn()) {
       this.router.navigate(['']);
       return;
+    }
+  }
+
+  onFileSelected(event: any) {// eslint-disable-line
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedImage = file;
     }
   }
 
@@ -103,14 +112,25 @@ export class LoginComponent implements OnInit {
         );
         return;
       }
-      const body = { ...this.signupForm.value, role: 'user' };
+      const formData = new FormData();
+      formData.append('username', this.signupForm.get('username')?.value);
+      formData.append('email', this.signupForm.get('email')?.value);
+      formData.append('password', this.signupForm.get('password')?.value);
+      formData.append('fullname', this.signupForm.get('fullname')?.value);
+      formData.append('role', 'user');
+      if (this.selectedImage) {
+        formData.append('image', this.selectedImage, this.selectedImage.name);
+      }
 
-      this._http.post(Constants.CREATE_USER, body).subscribe(
+      this._http.post(Constants.CREATE_USER, formData).subscribe(
         () => {
           this.popupService.showAlertMessage(
             Constants.USER_CREATED_MSG,
             Constants.SNACKBAR_SUCCESS
           );
+          this.signupForm.reset();
+          this.dialogRef.close();
+          this.router.navigate(['']);
         },
         (error) => {
           this.popupService.showAlertMessage(

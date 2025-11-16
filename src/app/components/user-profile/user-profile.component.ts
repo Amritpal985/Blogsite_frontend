@@ -116,6 +116,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     this._http.put(Constants.UPDATE_USER_INFO, formData).subscribe(
       () => {
         this.popupService.showAlertMessage(Constants.USER_UPDATED_MSG, Constants.SNACKBAR_SUCCESS);
+        const updatedUsername = this.profileForm.get('fullname')?.value || this.user.fullname;
+        this.user.fullname = updatedUsername;
       },
       (err) => {
         console.log(err);

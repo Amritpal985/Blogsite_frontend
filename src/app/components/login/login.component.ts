@@ -37,6 +37,8 @@ export class LoginComponent implements OnInit {
   private loginService = inject(LoginService);
   private dialogRef = inject(MatDialogRef<LoginComponent>);
 
+  isLoading = false;
+
   selectedImage: File | null = null;
 
   loginForm: FormGroup = this.fb.group({
@@ -72,9 +74,11 @@ export class LoginComponent implements OnInit {
    * @returns void.
    */
   onSubmit(isLoginForm: boolean): void {
+    this.isLoading = true;
     if (isLoginForm) {
       if (this.loginForm.invalid) {
         this.popupService.showAlertMessage(Constants.INVALID_FORM_MSG, Constants.SNACKBAR_WARNING);
+        this.isLoading = false;
         return;
       }
       const body = new URLSearchParams();
@@ -90,17 +94,20 @@ export class LoginComponent implements OnInit {
             this.popupService.showAlertMessage(Constants.LOGIN_MSG, Constants.SNACKBAR_SUCCESS);
             this.dialogRef.close();
             this.loginService.loginSubject$.next(true);
+            this.isLoading = false;
           },
           (error) => {
             this.popupService.showAlertMessage(
               error?.error?.detail || Constants.GENERIC_MSG,
               Constants.SNACKBAR_ERROR
             );
+            this.isLoading = false;
           }
         );
     } else {
       if (this.signupForm.invalid) {
         this.popupService.showAlertMessage(Constants.INVALID_FORM_MSG, Constants.SNACKBAR_WARNING);
+        this.isLoading = false;
         return;
       }
       if (
@@ -110,6 +117,7 @@ export class LoginComponent implements OnInit {
           Constants.PASSWORDS_MISMATCH_MSG,
           Constants.SNACKBAR_ERROR
         );
+        this.isLoading = false;
         return;
       }
       const formData = new FormData();
@@ -130,6 +138,7 @@ export class LoginComponent implements OnInit {
           );
           this.signupForm.reset();
           this.dialogRef.close();
+          this.isLoading = false;
           this.router.navigate(['']);
         },
         (error) => {
@@ -137,6 +146,7 @@ export class LoginComponent implements OnInit {
             error?.error?.detail || Constants.GENERIC_MSG,
             Constants.SNACKBAR_ERROR
           );
+          this.isLoading = false;
         }
       );
     }

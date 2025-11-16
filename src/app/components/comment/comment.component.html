@@ -7,7 +7,7 @@
         nz-input
         rows="4"
         [placeholder]="commentAreaPlaceholder"
-        [disabled]="!isUserLoggedIn"
+        [disabled]="!isUserLoggedIn || commentsLoading"
       ></textarea>
     </nz-form-item>
     <nz-form-item>
@@ -24,8 +24,17 @@
   </nz-comment-content>
 </nz-comment>
 
-<!-- list of comments -->
-<nz-list [nzDataSource]="comments" [nzRenderItem]="item" [nzItemLayout]="'horizontal'"></nz-list>
+<div *ngIf="commentsLoading; else commentsLoaded" class="dots-loader">
+  <div></div>
+  <div></div>
+  <div></div>
+  <p>Loading comments...</p>
+</div>
+
+<ng-template #commentsLoaded>
+  <!-- list of comments -->
+  <nz-list [nzDataSource]="comments" [nzRenderItem]="item" [nzItemLayout]="'horizontal'"></nz-list>
+</ng-template>
 
 <ng-template #item let-item>
   <ng-container *ngTemplateOutlet="commentTemplateRef; context: { comment: item }"> </ng-container>
@@ -34,7 +43,10 @@
 <!-- comments nesting -->
 <ng-template #commentTemplateRef let-comment="comment">
   <nz-comment [nzAuthor]="comment.author_name">
-    <nz-avatar nz-comment-avatar [nzSrc]="avatar"></nz-avatar>
+    <nz-avatar
+      nz-comment-avatar
+      [nzSrc]="comment.image ? 'data:image/png;base64,' + comment.image : avatar"
+    ></nz-avatar>
     <nz-comment-content>
       <p>{{ comment.content }}</p>
     </nz-comment-content>

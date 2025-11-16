@@ -31,6 +31,7 @@ export interface CommentNode {
   author_name: string;
   content: string;
   children?: CommentNode[];
+  image?: string;
 }
 
 export interface CommentResponse {
@@ -63,6 +64,7 @@ export interface User {
   fullname: string;
   email: string;
   about_me: string;
+  bio: string;
   image: string;
   total_posts: string;
   followers: number;

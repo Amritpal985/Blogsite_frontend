@@ -70,3 +70,28 @@
   border-color: #3f51b5;
   background-color: #f0f0ff;
 }
+
+
+button.loading-border {
+  position: relative;
+  z-index: 1;
+}
+
+button.loading-border::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #2196f3, #21cbf3, #2196f3);
+  background-size: 300% 100%;
+  animation: moveBorder 1.5s linear infinite;
+  z-index: -1;
+}
+
+@keyframes moveBorder {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 300% 0%; }
+}

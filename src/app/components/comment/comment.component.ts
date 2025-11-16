@@ -50,18 +50,22 @@ export class CommentComponent implements OnInit, OnDestroy {
   commentAreaPlaceholder = 'please login to add or reply a comment...';
 
   comments: CommentNode[] = [];
+  commentsLoading = false;
 
   replyingToId: number | null = null;
   replyText = '';
 
   ngOnInit(): void {
+    this.commentsLoading = true;
     const url = `${Constants.GET_COMMENTS}/${this.postId}`;
     this._http.get<CommentNode[]>(url).subscribe(
       (res) => {
         this.comments = res;
+        this.commentsLoading = false;
       },
       (err) => {
         console.log(err);
+        this.commentsLoading = false;
       }
     );
     // localStorage.setItem("token","dakdbds");

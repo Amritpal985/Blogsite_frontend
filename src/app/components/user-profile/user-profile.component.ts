@@ -16,7 +16,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { User } from '../../interfaces';
 import { HttpClient } from '@angular/common/http';
-import { SpinnerComponent } from '../spinner/spinner.component';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-user-profile',
@@ -32,7 +32,7 @@ import { SpinnerComponent } from '../spinner/spinner.component';
     MatInputModule,
     MatButtonModule,
     ChatComponent,
-    SpinnerComponent,
+    SkeletonModule,
   ],
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.scss',

@@ -1,21 +1,37 @@
-<app-spinner [isLoading]="isLoading"></app-spinner>
-
-<div class="profile-container" *ngIf="user">
+<div class="profile-container">
   <!-- Profile Header -->
   <mat-card class="profile-header mt-5">
-    <img class="avatar" alt="User Avatar" src="data:image/jpeg;base64,{{ user.image }}" />
-    <div class="header-details">
-      <h2>{{ user.fullname }}</h2>
-      <p class="email"><mat-icon>email</mat-icon> {{ user.email }}</p>
-      <h3>{{ user.bio }}</h3>
+    <div
+      class="border-round border-1 surface-border surface-card"
+      *ngIf="isLoading && !user; else headerTab"
+    >
+      <div class="d-flex">
+        <p-skeleton shape="circle" size="12rem" styleClass="mr-4" />
+        <div class="ms-4">
+          <p-skeleton width="12rem" styleClass="mb-2 mt-5" />
+          <p-skeleton width="8rem" styleClass="my-4" />
+          <p-skeleton width="25rem" />
+        </div>
+      </div>
     </div>
+
+    <ng-template #headerTab>
+      <img class="avatar" alt="User Avatar" src="data:image/jpeg;base64,{{ user.image }}" />
+      <div class="header-details">
+        <h2>{{ user.fullname }}</h2>
+        <p class="email"><mat-icon>email</mat-icon> {{ user.email }}</p>
+        <h3>{{ user.bio }}</h3>
+      </div>
+    </ng-template>
   </mat-card>
 
   <!-- Tabs -->
   <mat-tab-group>
     <!-- Info Tab -->
     <mat-tab label="Info">
-      {{ user.about_me }}
+      <div *ngIf="user">
+        {{ user.about_me }}
+      </div>
     </mat-tab>
 
     <!-- Chats Tab -->
@@ -48,7 +64,9 @@
             <input matInput type="password" formControlName="confirmPassword" />
           </mat-form-field>
 
-          <button mat-raised-button color="primary mb-3" type="submit">Update Profile</button>
+          <button mat-raised-button color="primary mb-3" type="submit" [disabled]="!user">
+            Update Profile
+          </button>
         </form>
       </div>
     </mat-tab>

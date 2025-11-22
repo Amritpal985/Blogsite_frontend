@@ -1,6 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,11 +15,13 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { Editor, NgxEditorModule } from 'ngx-editor';
 import { CustomDialogComponent } from '../custom-dialog/custom-dialog.component';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, Subject, takeUntil } from 'rxjs';
 import { Constants } from '../../constants';
 import { MatIconModule } from '@angular/material/icon';
 import { HttpClient } from '@angular/common/http';
 import { PopupService } from '../../services/popup/popup.service';
+import { LoginService } from '../../services/login/login.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-post',
@@ -34,12 +42,17 @@ import { PopupService } from '../../services/popup/popup.service';
   styleUrl: './add-post.component.scss',
 })
 export class AddPostComponent implements OnInit, OnDestroy {
-  editor!: Editor;
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+
+  private popupService = inject(PopupService);
+  private loginService = inject(LoginService);
   private fb = inject(FormBuilder);
   private dialog = inject(MatDialog);
   private _http = inject(HttpClient);
-  private popupService = inject(PopupService);
+  private destroy$ = new Subject<void>();
+  private router = inject(Router);
 
+  editor!: Editor;
   form!: FormGroup;
 
   selectOptions = [
@@ -59,11 +72,18 @@ export class AddPostComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.editor = new Editor();
     this.form = this.fb.group({
-      title: [''],
-      content: [''],
-      tags: [[]],
+      title: ['', Validators.required],
+      content: ['', Validators.required],
+      tags: [[], Validators.required],
       image: [null],
     });
+    this.loginService.loginSubject$
+      .asObservable()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        const isUserLoggedIn = this.loginService.isUserLoggedIn();
+        if (!isUserLoggedIn) this.router.navigate(['']);
+      });
   }
 
   /**
@@ -118,6 +138,10 @@ export class AddPostComponent implements OnInit, OnDestroy {
    * It prepares the data and saves a post.
    */
   savePost() {
+    if (!this.form.valid) {
+      this.popupService.showAlertMessage(Constants.INVALID_FORM_MSG, Constants.SNACKBAR_WARNING);
+      return;
+    }
     const formData = new FormData();
     formData.append('title', this.form.get('title')?.value);
     formData.append('content', this.form.get('content')?.value);
@@ -126,6 +150,7 @@ export class AddPostComponent implements OnInit, OnDestroy {
     this._http.post(Constants.CREATE_POST, formData).subscribe(
       (res: any) => { // eslint-disable-line
         this.form.reset();
+        this.fileInput.nativeElement.value = '';
         this.popupService.showAlertMessage(
           res?.message || Constants.POST_CREATED_MSG,
           Constants.SNACKBAR_SUCCESS
@@ -142,5 +167,7 @@ export class AddPostComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy(): void {
     this.editor.destroy();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

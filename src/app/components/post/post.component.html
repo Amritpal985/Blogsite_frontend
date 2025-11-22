@@ -1,45 +1,88 @@
-<app-spinner [isLoading]="isLoading"></app-spinner>
-
-<div class="container-fluid" *ngIf="post && !isLoading">
+<div class="container-fluid">
   <div class="row justify-content-center">
     <div class="col-12 col-lg-3 mb-4">
       <div class="side-box mb-4">
         <h5 class="title">Tags</h5>
-        <div class="tag-chips d-flex flex-wrap">
+        <div class="tag-chips d-flex flex-wrap" *ngIf="post">
           <mat-chip *ngFor="let tag of post.formatted_tags" class="me-2 mb-2">{{ tag }}</mat-chip>
+        </div>
+        <div class="tag-chips d-flex flex-wrap" *ngIf="isLoading">
+          <p-skeleton width="5rem" styleClass="mb-2 me-2" borderRadius="16px" height="2rem" />
+          <p-skeleton width="5rem" styleClass="mb-2 " borderRadius="16px" height="2rem" />
         </div>
       </div>
 
       <div class="side-box mb-4">
         <h5 class="title">Last updated on</h5>
-        <p class="updated-date">{{ post.updated_at | date: 'medium' }}</p>
+        <p class="updated-date" *ngIf="post">{{ post.updated_at | date: 'medium' }}</p>
+        <p-skeleton
+          width="100%"
+          styleClass="mb-2 "
+          borderRadius="0.4rem"
+          height="2rem"
+          *ngIf="isLoading"
+        />
       </div>
 
       <div class="side-box">
         <h5 class="title">Recent Posts</h5>
-        <ul class="recent-posts list-unstyled ps-2">
+        <ul class="recent-posts list-unstyled ps-2" *ngIf="post">
           <li><a href="">First Post</a></li>
           <li><a href="">First Post</a></li>
           <li><a href="">First Post</a></li>
           <li><a href="">First Post</a></li>
         </ul>
+        <ul class="recent-posts list-unstyled ps-2" *ngIf="isLoading">
+          @for (i of [1, 2, 3, 4]; track i) {
+            <li>
+              <p-skeleton
+                width="10rem"
+                class="mb-2"
+                borderRadius="0.5rem"
+                height="1rem"
+              ></p-skeleton>
+            </li>
+          }
+        </ul>
       </div>
     </div>
 
     <div class="col-12 col-lg-9">
-      <div class="post-title mt-5">{{ post.title }}</div>
-      <div class="post-submitted-by mt-2">
+      <div class="post-title mt-5" *ngIf="post">{{ post.title }}</div>
+      <div class="post-submitted-by mt-2" *ngIf="post">
         Submitted by {{ post.author.username }} at {{ post.created_at | date: 'medium' }}
+      </div>
+      <div class="header-skeleton mt-5" *ngIf="isLoading">
+        <p-skeleton borderRadius="0.3rem" width="30%" height="2rem" styleClass="mb-2" />
+        <p-skeleton borderRadius="0.3rem" width="100%" height="2.5rem" />
       </div>
 
       <div class="post-content mt-4">
-        <img src="../../../assets/posts-home-bg.jpg" alt="Post Image" class="img-fluid rounded" />
+        <img
+          src="../../../assets/posts-home-bg.jpg"
+          alt="Post Image"
+          class="img-fluid rounded"
+          *ngIf="post"
+        />
+        <p-skeleton borderRadius="0.5rem" height="30rem" width="100%" *ngIf="isLoading" />
         <div class="NgxEditor__Wrapper mt-4">
-          <ngx-editor [editor]="editor" [disabled]="true" [(ngModel)]="post.content"></ngx-editor>
+          <ngx-editor
+            [editor]="editor"
+            [disabled]="true"
+            [(ngModel)]="post.content"
+            *ngIf="post"
+          ></ngx-editor>
+          <div *ngIf="isLoading">
+            <p-skeleton borderRadius="0.3rem" width="98%" height="1.3rem" styleClass="mb-3" />
+            <p-skeleton borderRadius="0.3rem" width="80%" height="1.3rem" styleClass="mb-3" />
+            <p-skeleton borderRadius="0.3rem" width="95%" height="1.3rem" styleClass="mb-3" />
+            <p-skeleton borderRadius="0.3rem" width="70%" height="1.3rem" styleClass="mb-3" />
+            <p-skeleton borderRadius="0.3rem" width="90%" height="1.3rem" styleClass="mb-3" />
+          </div>
         </div>
       </div>
 
-      <div class="comments-container mt-5">
+      <div class="comments-container mt-5" *ngIf="post">
         <app-comment [postId]="post.id"></app-comment>
       </div>
     </div>

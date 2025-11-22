@@ -1,5 +1,11 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -16,13 +22,12 @@ import { Subject, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { User } from '../../interfaces';
 import { HttpClient } from '@angular/common/http';
-import { SpinnerComponent } from '../spinner/spinner.component';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-user-profile',
   standalone: true,
   imports: [
-    CommonModule,
     MatTabsModule,
     MatFormFieldModule,
     MatCardModule,
@@ -32,10 +37,11 @@ import { SpinnerComponent } from '../spinner/spinner.component';
     MatInputModule,
     MatButtonModule,
     ChatComponent,
-    SpinnerComponent,
+    SkeletonModule,
   ],
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserProfileComponent implements OnInit, OnDestroy {
   private popupService = inject(PopupService);
@@ -43,6 +49,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   private _http = inject(HttpClient);
   private router = inject(Router);
   private fb = inject(FormBuilder);
+  private cdr = inject(ChangeDetectorRef);
   private destroy$ = new Subject<void>();
 
   user!: User;
@@ -63,17 +70,21 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   }
 
   private getUserDetails() {
-    this._http.get<User>(Constants.GET_USER_INFO).subscribe(
-      (res) => {
-        this.user = res;
-        this.updateFormValues();
-        this.isLoading = false;
-      },
-      (err) => {
-        console.log(err);
-        this.isLoading = false;
-      }
-    );
+    this._http
+      .get<User>(Constants.GET_USER_INFO)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this.user = res;
+          this.updateFormValues();
+          this.isLoading = false;
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.isLoading = false;
+          this.cdr.markForCheck();
+        },
+      });
   }
 
   private initializeUpdateForm() {
@@ -113,16 +124,24 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     formData.append('fullname', this.profileForm.get('fullname')?.value);
     const pwd = this.profileForm.get('newPassword')?.value;
     if (pwd) formData.append('password', pwd);
-    this._http.put(Constants.UPDATE_USER_INFO, formData).subscribe(
-      () => {
-        this.popupService.showAlertMessage(Constants.USER_UPDATED_MSG, Constants.SNACKBAR_SUCCESS);
-        const updatedUsername = this.profileForm.get('fullname')?.value || this.user.fullname;
-        this.user.fullname = updatedUsername;
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
+    this._http
+      .put(Constants.UPDATE_USER_INFO, formData)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.popupService.showAlertMessage(
+            Constants.USER_UPDATED_MSG,
+            Constants.SNACKBAR_SUCCESS
+          );
+          const updatedUsername = this.profileForm.get('fullname')?.value || this.user.fullname;
+          this.user.fullname = updatedUsername;
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.popupService.showAlertMessage(Constants.GENERIC_MSG, Constants.SNACKBAR_ERROR);
+          this.cdr.markForCheck();
+        },
+      });
   }
 
   ngOnDestroy(): void {

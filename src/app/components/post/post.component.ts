@@ -5,12 +5,12 @@ import { HttpClient } from '@angular/common/http';
 import { Constants } from '../../constants';
 import { CommonModule } from '@angular/common';
 import { MatChipsModule } from '@angular/material/chips';
-import { SpinnerComponent } from '../spinner/spinner.component';
 import { PopupService } from '../../services/popup/popup.service';
 import { Editor, NgxEditorModule } from 'ngx-editor';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import DOMPurify from 'dompurify';
 import { CommentComponent } from '../comment/comment.component';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-post',
@@ -18,11 +18,11 @@ import { CommentComponent } from '../comment/comment.component';
   imports: [
     CommonModule,
     MatChipsModule,
-    SpinnerComponent,
     NgxEditorModule,
     ReactiveFormsModule,
     FormsModule,
     CommentComponent,
+    SkeletonModule,
   ],
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss',

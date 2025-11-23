@@ -21,7 +21,7 @@
       </div>
 
       <div class="file-upload mb-4">
-        <input type="file" class="form-control" (change)="onFileChange($event)" />
+        <input type="file" class="form-control" (change)="onFileChange($event)" #fileInput />
       </div>
 
       <div class="content mb-5">
@@ -55,7 +55,7 @@
         </mat-form-field>
       </div>
 
-      <button mat-raised-button color="primary" class="post-btn">Post</button>
+      <button mat-raised-button color="primary" class="post-btn" (click)="savePost()">Post</button>
     </form>
   </div>
 </div>

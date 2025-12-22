@@ -9,11 +9,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-// import { mockData } from '../../mock-data';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
-import { SpinnerComponent } from '../spinner/spinner.component';
 import DOMPurify from 'dompurify';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-posts',
@@ -27,7 +26,7 @@ import DOMPurify from 'dompurify';
     MatInputModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    SpinnerComponent,
+    SkeletonModule,
   ],
   templateUrl: './posts.component.html',
   styleUrl: './posts.component.scss',

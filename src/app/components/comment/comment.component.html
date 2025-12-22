@@ -33,7 +33,12 @@
 
 <ng-template #commentsLoaded>
   <!-- list of comments -->
-  <nz-list [nzDataSource]="comments" [nzRenderItem]="item" [nzItemLayout]="'horizontal'"></nz-list>
+  <nz-list
+    [nzDataSource]="comments"
+    [nzRenderItem]="item"
+    [nzItemLayout]="'horizontal'"
+    nzNoResult="No comments yet"
+  ></nz-list>
 </ng-template>
 
 <ng-template #item let-item>

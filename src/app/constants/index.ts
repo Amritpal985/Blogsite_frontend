@@ -1,19 +1,22 @@
+const hostURL = 'https://blogsite-backend-p8w3.onrender.com/'
+const webSocketURL = 'wss://blogsite-backend-p8w3.onrender.com/'
+
 export class Constants {
   // urls
-  public static readonly CREATE_USER = 'http://localhost:8000/users/signup';
-  public static readonly LOGIN_USER = 'http://localhost:8000/users/login';
-  public static readonly GET_USER_INFO = 'http://localhost:8000/users/me';
-  public static readonly ALL_POSTS = 'http://localhost:8000/posts';
-  public static readonly GET_POST = 'http://localhost:8000/posts';
-  public static readonly CREATE_POST = 'http://localhost:8000/posts/create_posts';
-  public static readonly GET_COMMENTS = 'http://localhost:8000/comments';
-  public static readonly ADD_COMMENT = 'http://localhost:8000/comments';
-  public static readonly REPLY_TO_COMMENT = 'http://localhost:8000/comments/reply';
-  public static readonly GET_ALL_FOLLOWERS = 'http://localhost:8000/follows/followers';
-  public static readonly GET_CHAT_HISTORY = 'http://localhost:8000/chat/history';
-  public static readonly SEND_MESSAGE_URL = 'http://localhost:8000/chat/send';
-  public static readonly WEBSOCKET_MESSAGE_URL = 'ws://localhost:8000/chat/ws';
-  public static readonly UPDATE_USER_INFO = 'http://localhost:8000/users/update';
+  public static readonly CREATE_USER = `${hostURL}users/signup`;
+  public static readonly LOGIN_USER = `${hostURL}users/login`;
+  public static readonly GET_USER_INFO = `${hostURL}users/me`;
+  public static readonly ALL_POSTS = `${hostURL}posts`;
+  public static readonly GET_POST = `${hostURL}posts`;
+  public static readonly CREATE_POST = `${hostURL}posts/create_posts`;
+  public static readonly GET_COMMENTS = `${hostURL}comments`;
+  public static readonly ADD_COMMENT = `${hostURL}comments`;
+  public static readonly REPLY_TO_COMMENT = `${hostURL}comments/reply`;
+  public static readonly GET_ALL_FOLLOWERS = `${hostURL}follows/followers`;
+  public static readonly GET_CHAT_HISTORY = `${hostURL}chat/history`;
+  public static readonly SEND_MESSAGE_URL = `${hostURL}chat/send`;
+  public static readonly WEBSOCKET_MESSAGE_URL = `${webSocketURL}chat/ws`;
+  public static readonly UPDATE_USER_INFO = `${hostURL}users/update`;
 
   // messages
   public static readonly LOGIN_MSG = 'Loggedin successfully. Welcome back.';

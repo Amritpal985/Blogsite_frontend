@@ -5,11 +5,11 @@
   </div>
 
   <div id="content" class="mt-4 d-flex flex-column">
-    <div class="filter-box">
+    <form [formGroup]="filterForm" class="filter-box">
       <div class="tags">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Tags</mat-label>
-          <mat-select multiple>
+          <mat-select multiple formControlName="tags">
             <mat-option value="art">Art</mat-option>
             <mat-option value="tech">Tech</mat-option>
             <mat-option value="sports">Sports</mat-option>
@@ -20,59 +20,63 @@
       <div class="author-name">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Author name</mat-label>
-          <input matInput placeholder="Enter author name" />
+          <input matInput placeholder="Enter author name" formControlName="author" />
         </mat-form-field>
       </div>
 
       <div class="search-button">
-        <button mat-raised-button color="primary" class="search-btn">
+        <button mat-raised-button color="primary" class="search-btn" (click)="fetchPosts(1)">
           <mat-icon>search</mat-icon>
           <span>Search</span>
         </button>
       </div>
-    </div>
+    </form>
 
-    <div class="posts" *ngIf="isLoading; else postsLoaded">
-      <mat-card class="card my-4" *ngFor="let _ of [1, 2, 3]">
-        <mat-card-header>
-          <mat-card-title>
-            <p-skeleton width="70%" height="1.5rem"></p-skeleton>
-          </mat-card-title>
-        </mat-card-header>
-
-        <mat-card-content>
-          <p-skeleton width="100%" height="1rem" styleClass="mb-2"></p-skeleton>
-          <p-skeleton width="95%" height="1rem" styleClass="mb-2"></p-skeleton>
-          <p-skeleton width="90%" height="1rem"></p-skeleton>
-        </mat-card-content>
-
-        <mat-card-actions class="d-flex justify-content-between">
-          <p-skeleton width="2rem" height="1.5rem"></p-skeleton>
-          <p-skeleton width="5rem" height="1.5rem"></p-skeleton>
-        </mat-card-actions>
-      </mat-card>
-    </div>
-
-    <ng-template #postsLoaded>
-      <div class="posts" *ngIf="allPosts.length">
-        <mat-card class="card my-4" *ngFor="let post of allPosts">
-          <mat-card-header>
-            <mat-card-title>{{ post.title }}</mat-card-title>
-          </mat-card-header>
-          <mat-card-content [innerHTML]="post.content"></mat-card-content>
-          <mat-card-actions class="d-flex justify-content-between">
-            <div>
-              <button mat-button (click)="openPost(post.id)">
-                <mat-icon>open_in_new</mat-icon>
-              </button>
-            </div>
-            <div>
-              <button mat-button>{{ post.author.username }}</button>
-            </div>
-          </mat-card-actions>
-        </mat-card>
+    @if (isLoading) {
+      <div class="posts">
+        @for (_ of [1, 2, 3]; track _) {
+          <mat-card class="card my-4">
+            <mat-card-header>
+              <mat-card-title>
+                <p-skeleton width="70%" height="1.5rem"></p-skeleton>
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <p-skeleton width="100%" height="1rem" styleClass="mb-2"></p-skeleton>
+              <p-skeleton width="95%" height="1rem" styleClass="mb-2"></p-skeleton>
+              <p-skeleton width="90%" height="1rem"></p-skeleton>
+            </mat-card-content>
+            <mat-card-actions class="d-flex justify-content-between">
+              <p-skeleton width="2rem" height="1.5rem"></p-skeleton>
+              <p-skeleton width="5rem" height="1.5rem"></p-skeleton>
+            </mat-card-actions>
+          </mat-card>
+        }
       </div>
-    </ng-template>
+    } @else {
+      @if (allPosts.length) {
+        <div class="posts">
+          @for (post of allPosts; track post) {
+            <mat-card class="card my-4">
+              <mat-card-header>
+                <mat-card-title>{{ post.title }}</mat-card-title>
+              </mat-card-header>
+              <mat-card-content [innerHTML]="post.content"></mat-card-content>
+              <mat-card-actions class="d-flex justify-content-between">
+                <div>
+                  <button mat-button (click)="openPost(post.id)">
+                    <mat-icon>open_in_new</mat-icon>
+                  </button>
+                </div>
+                <div>
+                  <button mat-button>{{ post.author.username }}</button>
+                </div>
+              </mat-card-actions>
+            </mat-card>
+          }
+        </div>
+      }
+    }
 
     <div class="pagination-buttons d-flex justify-content-center align-items-center my-4">
       <button

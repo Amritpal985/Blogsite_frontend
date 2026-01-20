@@ -1,5 +1,3 @@
-<app-spinner [isLoading]="isLoading"></app-spinner>
-
 <div id="parent" class="d-flex flex-column">
   <div id="top">
     <h1 class="top-title">Discover Posts</h1>
@@ -34,24 +32,47 @@
       </div>
     </div>
 
-    <div class="posts" *ngIf="allPosts.length">
-      <mat-card class="card my-4" *ngFor="let post of allPosts">
+    <div class="posts" *ngIf="isLoading; else postsLoaded">
+      <mat-card class="card my-4" *ngFor="let _ of [1, 2, 3]">
         <mat-card-header>
-          <mat-card-title>{{ post.title }}</mat-card-title>
+          <mat-card-title>
+            <p-skeleton width="70%" height="1.5rem"></p-skeleton>
+          </mat-card-title>
         </mat-card-header>
-        <mat-card-content [innerHTML]="post.content"></mat-card-content>
+
+        <mat-card-content>
+          <p-skeleton width="100%" height="1rem" styleClass="mb-2"></p-skeleton>
+          <p-skeleton width="95%" height="1rem" styleClass="mb-2"></p-skeleton>
+          <p-skeleton width="90%" height="1rem"></p-skeleton>
+        </mat-card-content>
+
         <mat-card-actions class="d-flex justify-content-between">
-          <div>
-            <button mat-button (click)="openPost(post.id)">
-              <mat-icon>open_in_new</mat-icon>
-            </button>
-          </div>
-          <div>
-            <button mat-button>{{ post.author.username }}</button>
-          </div>
+          <p-skeleton width="2rem" height="1.5rem"></p-skeleton>
+          <p-skeleton width="5rem" height="1.5rem"></p-skeleton>
         </mat-card-actions>
       </mat-card>
     </div>
+
+    <ng-template #postsLoaded>
+      <div class="posts" *ngIf="allPosts.length">
+        <mat-card class="card my-4" *ngFor="let post of allPosts">
+          <mat-card-header>
+            <mat-card-title>{{ post.title }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content [innerHTML]="post.content"></mat-card-content>
+          <mat-card-actions class="d-flex justify-content-between">
+            <div>
+              <button mat-button (click)="openPost(post.id)">
+                <mat-icon>open_in_new</mat-icon>
+              </button>
+            </div>
+            <div>
+              <button mat-button>{{ post.author.username }}</button>
+            </div>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </ng-template>
 
     <div class="pagination-buttons d-flex justify-content-center align-items-center my-4">
       <button

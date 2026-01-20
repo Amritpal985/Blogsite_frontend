@@ -1,5 +1,5 @@
-const hostURL = 'https://blogsite-backend-p8w3.onrender.com/'
-const webSocketURL = 'wss://blogsite-backend-p8w3.onrender.com/'
+const hostURL = 'https://blogsite-backend-p8w3.onrender.com/';
+const webSocketURL = 'wss://blogsite-backend-p8w3.onrender.com/';
 
 export class Constants {
   // urls

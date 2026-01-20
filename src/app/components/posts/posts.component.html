@@ -5,11 +5,11 @@
   </div>
 
   <div id="content" class="mt-4 d-flex flex-column">
-    <div class="filter-box">
+    <form [formGroup]="filterForm" class="filter-box">
       <div class="tags">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Tags</mat-label>
-          <mat-select multiple>
+          <mat-select multiple formControlName="tags">
             <mat-option value="art">Art</mat-option>
             <mat-option value="tech">Tech</mat-option>
             <mat-option value="sports">Sports</mat-option>
@@ -20,17 +20,17 @@
       <div class="author-name">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Author name</mat-label>
-          <input matInput placeholder="Enter author name" />
+          <input matInput placeholder="Enter author name" formControlName="author" />
         </mat-form-field>
       </div>
 
       <div class="search-button">
-        <button mat-raised-button color="primary" class="search-btn">
+        <button mat-raised-button color="primary" class="search-btn" (click)="fetchPosts(1)">
           <mat-icon>search</mat-icon>
           <span>Search</span>
         </button>
       </div>
-    </div>
+    </form>
 
     <div class="posts" *ngIf="isLoading; else postsLoaded">
       <mat-card class="card my-4" *ngFor="let _ of [1, 2, 3]">

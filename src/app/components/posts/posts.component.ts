@@ -13,6 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import DOMPurify from 'dompurify';
 import { SkeletonModule } from 'primeng/skeleton';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-posts',
@@ -27,6 +28,7 @@ import { SkeletonModule } from 'primeng/skeleton';
     MatIconModule,
     MatProgressSpinnerModule,
     SkeletonModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './posts.component.html',
   styleUrl: './posts.component.scss',
@@ -34,6 +36,7 @@ import { SkeletonModule } from 'primeng/skeleton';
 export class PostsComponent implements OnInit {
   private _http = inject(HttpClient);
   private router = inject(Router);
+  private fb = inject(FormBuilder);
 
   isLoading = false;
   allPosts: Post[] = [];
@@ -41,9 +44,13 @@ export class PostsComponent implements OnInit {
 
   page_number = 1;
   readonly page_size = 2;
+  filterForm!: FormGroup;
 
   ngOnInit(): void {
-    // this.allPosts = mockData;
+    this.filterForm = this.fb.group({
+      tags: [[]],
+      author: [''],
+    });
     this.page_number = 1;
     this.fetchPosts(this.page_number);
   }
@@ -53,10 +60,12 @@ export class PostsComponent implements OnInit {
    * @param page_number of current page.
    */
   fetchPosts(page_number: number) {
+    const { tags, author } = this.filterForm.value;
+    const tagsAsString = tags.join(',') ?? '';
     this.isLoading = true;
     let headers: HttpHeaders = new HttpHeaders();
     headers = headers.set('Authorization', `Bearer ${localStorage.getItem('token')}`);
-    const url = `${Constants.ALL_POSTS}?page_number=${page_number}`;
+    const url = `${Constants.ALL_POSTS}?page_number=${page_number}&author=${author}&tags=${tagsAsString}`;
     this._http.get<GetAllPostResponse>(url, { headers }).subscribe(
       (res: GetAllPostResponse) => {
         this.allPosts = res.result.map((post) => {

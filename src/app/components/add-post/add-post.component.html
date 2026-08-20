@@ -25,10 +25,13 @@
       </div>
 
       <div class="content mb-5">
-        <div class="NgxEditor__Wrapper">
-          <ngx-editor-menu [editor]="editor"></ngx-editor-menu>
-          <ngx-editor [editor]="editor" [disabled]="false" formControlName="content"></ngx-editor>
-        </div>
+        <quill-editor
+          class="content-editor"
+          formControlName="content"
+          format="html"
+          theme="snow"
+          placeholder="Write your post here..."
+        ></quill-editor>
       </div>
 
       <div class="tags mb-4">

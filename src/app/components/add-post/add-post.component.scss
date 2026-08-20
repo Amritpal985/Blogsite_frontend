@@ -52,25 +52,23 @@ input[type='file'] {
   box-shadow: inset 0 1px 3px rgb(0 0 0 / 0.05);
 }
 
-.NgxEditor__Wrapper {
+.content-editor {
+  display: block;
   background: #fff;
-  border: 1px solid #ced4da;
   border-radius: 8px;
   color: #212529;
   box-shadow: 0 1px 8px rgb(0 0 0 / 0.04);
 }
 
-::ng-deep .NgxEditor {
+::ng-deep .content-editor .ql-container {
   height: 20rem;
   overflow-y: auto;
-  padding: 1rem;
+  font-family: 'Segoe UI', sans-serif;
   color: #212529;
 }
 
-::ng-deep .NgxEditor__Content {
+::ng-deep .content-editor .ql-editor {
   min-height: 20rem;
-  font-family: 'Segoe UI', sans-serif;
-  color: #212529;
 }
 
 .post-btn {
@@ -108,7 +106,7 @@ mat-chip {
     padding: 1rem 1.25rem;
   }
 
-  ::ng-deep .NgxEditor {
+  ::ng-deep .content-editor .ql-container {
     height: 15rem;
   }
 

@@ -52,9 +52,9 @@
         @if (isLoading) {
           <p-skeleton borderRadius="0.5rem" height="30rem" width="100%" />
         }
-        <div class="NgxEditor__Wrapper mt-4">
+        <div class="post-body mt-4">
           @if (post) {
-            <ngx-editor [editor]="editor" [disabled]="true" [(ngModel)]="post.content"></ngx-editor>
+            <quill-view [content]="post.content" format="html" theme="snow"></quill-view>
           }
           @if (isLoading) {
             <div>

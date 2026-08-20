@@ -13,8 +13,7 @@ import { Constants } from '../../constants';
 import { CommonModule } from '@angular/common';
 import { MatChipsModule } from '@angular/material/chips';
 import { PopupService } from '../../services/popup/popup.service';
-import { Editor, NgxEditorModule } from 'ngx-editor';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { QuillViewComponent } from 'ngx-quill';
 import DOMPurify from 'dompurify';
 import { CommentComponent } from '../comment/comment.component';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -26,9 +25,7 @@ import { Subject, switchMap, takeUntil } from 'rxjs';
   imports: [
     CommonModule,
     MatChipsModule,
-    NgxEditorModule,
-    ReactiveFormsModule,
-    FormsModule,
+    QuillViewComponent,
     CommentComponent,
     SkeletonModule,
   ],
@@ -37,7 +34,6 @@ import { Subject, switchMap, takeUntil } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PostComponent implements OnInit, OnDestroy {
-  editor!: Editor;
   private route = inject(ActivatedRoute);
   private _http = inject(HttpClient);
   private popupService = inject(PopupService);
@@ -49,7 +45,6 @@ export class PostComponent implements OnInit, OnDestroy {
   post!: Post;
 
   ngOnInit(): void {
-    this.editor = new Editor();
     this.isLoading = true;
     this.route.paramMap
       .pipe(
@@ -81,7 +76,6 @@ export class PostComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.editor.destroy();
     this.destroy$.next();
     this.destroy$.complete();
   }

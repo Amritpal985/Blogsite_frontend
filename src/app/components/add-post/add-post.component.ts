@@ -8,20 +8,14 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
-import { Editor, NgxEditorModule } from 'ngx-editor';
+import { QuillEditorComponent } from 'ngx-quill';
 import { CustomDialogComponent } from '../custom-dialog/custom-dialog.component';
 import { lastValueFrom, Subject, takeUntil } from 'rxjs';
 import { Constants } from '../../constants';
@@ -39,8 +33,7 @@ import { Router } from '@angular/router';
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
-    NgxEditorModule,
-    FormsModule,
+    QuillEditorComponent,
     ReactiveFormsModule,
     MatChipsModule,
     MatIconModule,
@@ -61,7 +54,6 @@ export class AddPostComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private router = inject(Router);
 
-  editor!: Editor;
   form!: FormGroup;
 
   selectOptions = [
@@ -79,7 +71,6 @@ export class AddPostComponent implements OnInit, OnDestroy {
   ];
 
   ngOnInit(): void {
-    this.editor = new Editor();
     this.form = this.fb.group({
       title: ['', Validators.required],
       content: ['', Validators.required],
@@ -179,7 +170,6 @@ export class AddPostComponent implements OnInit, OnDestroy {
    * Cleans up everything required.
    */
   ngOnDestroy(): void {
-    this.editor.destroy();
     this.destroy$.next();
     this.destroy$.complete();
   }

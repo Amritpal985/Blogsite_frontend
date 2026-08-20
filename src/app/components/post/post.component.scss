@@ -26,12 +26,15 @@
   margin-bottom: 1rem;
 }
 
-.NgxEditor__Wrapper {
+.post-body {
   border: 1px solid #ddd;
   border-radius: 0.25rem;
-  padding: 1rem;
   background-color: #fff;
   min-height: 10rem;
+}
+
+::ng-deep .post-body .ql-container.ql-snow {
+  border: none;
 }
 
 .side-box {

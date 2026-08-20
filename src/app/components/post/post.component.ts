@@ -2,36 +2,37 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  DestroyRef,
   inject,
-  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Post } from '../../interfaces';
 import { HttpClient } from '@angular/common/http';
 import { Constants } from '../../constants';
-import { CommonModule } from '@angular/common';
+import { DatePipe } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatChipsModule } from '@angular/material/chips';
 import { PopupService } from '../../services/popup/popup.service';
 import { QuillViewComponent } from 'ngx-quill';
 import DOMPurify from 'dompurify';
 import { CommentComponent } from '../comment/comment.component';
 import { SkeletonModule } from 'primeng/skeleton';
-import { Subject, switchMap, takeUntil } from 'rxjs';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-post',
-  imports: [CommonModule, MatChipsModule, QuillViewComponent, CommentComponent, SkeletonModule],
+  imports: [DatePipe, MatChipsModule, QuillViewComponent, CommentComponent, SkeletonModule],
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PostComponent implements OnInit, OnDestroy {
+export class PostComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private _http = inject(HttpClient);
   private popupService = inject(PopupService);
   private cdr = inject(ChangeDetectorRef);
-  private destroy$ = new Subject<void>();
+  private destroyRef = inject(DestroyRef);
 
   isLoading = false;
   postId: string | null = null;
@@ -46,7 +47,7 @@ export class PostComponent implements OnInit, OnDestroy {
           const url = `${Constants.GET_POST}/${this.postId}`;
           return this._http.get<Post>(url);
         }),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
         next: (res) => {
@@ -66,10 +67,5 @@ export class PostComponent implements OnInit, OnDestroy {
           this.cdr.markForCheck();
         },
       });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }

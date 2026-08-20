@@ -4,24 +4,24 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  DestroyRef,
   ElementRef,
   inject,
   OnDestroy,
   OnInit,
   viewChild,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatIconModule } from '@angular/material/icon';
 import { ChatMessage, Follower } from '../../interfaces';
 import { Constants } from '../../constants';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { WebSocketService } from '../../services/websocket/websocket.service';
 import { PopupService } from '../../services/popup/popup.service';
-import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-chat',
-  imports: [CommonModule, MatIconModule, FormsModule],
+  imports: [MatIconModule, FormsModule],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,7 +31,7 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
   private wsService = inject(WebSocketService);
   private popupService = inject(PopupService);
   private cdr = inject(ChangeDetectorRef);
-  private destroy$ = new Subject<void>();
+  private destroyRef = inject(DestroyRef);
 
   private readonly chatContainer = viewChild.required<ElementRef>('chatContainer');
 
@@ -43,7 +43,7 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
   ngOnInit(): void {
     this._http
       .get<{ followers: Follower[] }>(Constants.GET_ALL_FOLLOWERS)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
           this.followers = res.followers;
@@ -57,7 +57,7 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
       });
     const url = `${Constants.WEBSOCKET_MESSAGE_URL}/${localStorage.getItem('user_id')}`;
     this.wsService.connect(url);
-    this.wsService.messages$.pipe(takeUntil(this.destroy$)).subscribe((msg) => {
+    this.wsService.messages$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((msg) => {
       this.messageToSend = '';
       this.chatMessages.push(msg);
       this.cdr.markForCheck();
@@ -82,7 +82,7 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
     const url = `${Constants.GET_CHAT_HISTORY}/${userId}`;
     this._http
       .get<{ messages: ChatMessage[] }>(url)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
           this.chatMessages = res.messages;
@@ -115,8 +115,6 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
    * Cleans up any pending subscriptions.
    */
   ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
     this.wsService.close();
   }
 }

@@ -1,13 +1,14 @@
-import { CommonModule } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  DestroyRef,
   inject,
-  OnDestroy,
   OnInit,
   input,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
@@ -23,12 +24,11 @@ import { LoginService } from '../../services/login/login.service';
 import { PopupService } from '../../services/popup/popup.service';
 import { Constants } from '../../constants';
 import { HttpClient } from '@angular/common/http';
-import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-comment',
   imports: [
-    CommonModule,
+    NgTemplateOutlet,
     NzAvatarModule,
     NzCommentModule,
     NzIconModule,
@@ -43,15 +43,14 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrl: './comment.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CommentComponent implements OnInit, OnDestroy {
+export class CommentComponent implements OnInit {
   readonly postId = input.required<number>();
 
   private loginService = inject(LoginService);
   private popupService = inject(PopupService);
   private _http = inject(HttpClient);
   private cdr = inject(ChangeDetectorRef);
-
-  private destroy$ = new Subject<void>();
+  private destroyRef = inject(DestroyRef);
   avatar = '/assets/comment-avatar.png';
   commentText = '';
   submitting = false;
@@ -69,7 +68,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     const url = `${Constants.GET_COMMENTS}/${this.postId()}`;
     this._http
       .get<CommentNode[]>(url)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
           this.comments = res;
@@ -83,7 +82,7 @@ export class CommentComponent implements OnInit, OnDestroy {
       });
     this.loginService.loginSubject$
       .asObservable()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.isUserLoggedIn = this.loginService.isUserLoggedIn();
         this.commentAreaPlaceholder = this.isUserLoggedIn
@@ -110,7 +109,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     const url = `${Constants.ADD_COMMENT}/${this.postId()}`;
     this._http
       .post<CommentResponse>(url, { content })
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
           this.commentText = '';
@@ -167,7 +166,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     const url = `${Constants.REPLY_TO_COMMENT}/${parent.id}`;
     this._http
       .post<CommentResponse>(url, { content })
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
           const reply: CommentNode = {
@@ -190,13 +189,5 @@ export class CommentComponent implements OnInit, OnDestroy {
           this.cdr.markForCheck();
         },
       });
-  }
-
-  /**
-   * Cleans up any pending subscriptions.
-   */
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }

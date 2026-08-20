@@ -2,12 +2,13 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  DestroyRef,
   ElementRef,
   inject,
-  OnDestroy,
   OnInit,
   viewChild,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -17,7 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { QuillEditorComponent } from 'ngx-quill';
 import { CustomDialogComponent } from '../custom-dialog/custom-dialog.component';
-import { lastValueFrom, Subject, takeUntil } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 import { Constants } from '../../constants';
 import { MatIconModule } from '@angular/material/icon';
 import { HttpClient } from '@angular/common/http';
@@ -41,7 +42,7 @@ import { Router } from '@angular/router';
   styleUrl: './add-post.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AddPostComponent implements OnInit, OnDestroy {
+export class AddPostComponent implements OnInit {
   readonly fileInput = viewChild.required<ElementRef<HTMLInputElement>>('fileInput');
 
   private cdr = inject(ChangeDetectorRef);
@@ -50,7 +51,7 @@ export class AddPostComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private dialog = inject(MatDialog);
   private _http = inject(HttpClient);
-  private destroy$ = new Subject<void>();
+  private destroyRef = inject(DestroyRef);
   private router = inject(Router);
 
   form!: FormGroup;
@@ -78,7 +79,7 @@ export class AddPostComponent implements OnInit, OnDestroy {
     });
     this.loginService.loginSubject$
       .asObservable()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         const isUserLoggedIn = this.loginService.isUserLoggedIn();
         if (!isUserLoggedIn) this.router.navigate(['']);
@@ -148,7 +149,7 @@ export class AddPostComponent implements OnInit, OnDestroy {
     formData.append('image', this.form.get('image')?.value);
     this._http
       .post<{ message?: string }>(Constants.CREATE_POST, formData)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
           this.form.reset();
@@ -163,13 +164,5 @@ export class AddPostComponent implements OnInit, OnDestroy {
           this.popupService.showAlertMessage(Constants.GENERIC_MSG, Constants.SNACKBAR_ERROR);
         },
       });
-  }
-
-  /**
-   * Cleans up everything required.
-   */
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }

@@ -2,10 +2,11 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  DestroyRef,
   inject,
-  OnDestroy,
   OnInit,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { GetAllPostResponse, Post } from '../../interfaces';
 import { HttpClient } from '@angular/common/http';
 import { Constants } from '../../constants';
@@ -21,7 +22,6 @@ import { Router } from '@angular/router';
 import DOMPurify from 'dompurify';
 import { SkeletonModule } from 'primeng/skeleton';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-posts',
@@ -40,12 +40,12 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrl: './posts.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PostsComponent implements OnInit, OnDestroy {
+export class PostsComponent implements OnInit {
   private _http = inject(HttpClient);
   private router = inject(Router);
   private fb = inject(FormBuilder);
   private cdr = inject(ChangeDetectorRef);
-  private destroy$ = new Subject<void>();
+  private destroyRef = inject(DestroyRef);
 
   isLoading = false;
   allPosts: Post[] = [];
@@ -75,7 +75,7 @@ export class PostsComponent implements OnInit, OnDestroy {
     const url = `${Constants.ALL_POSTS}?page_number=${page_number}&author=${author}&tags=${tagsAsString}`;
     this._http
       .get<GetAllPostResponse>(url)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res: GetAllPostResponse) => {
           this.allPosts = res.result.map((post) => {
@@ -117,10 +117,5 @@ export class PostsComponent implements OnInit, OnDestroy {
    */
   openPost(postId: number) {
     this.router.navigate(['/post', postId]);
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }

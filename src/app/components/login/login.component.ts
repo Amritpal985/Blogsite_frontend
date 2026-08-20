@@ -2,10 +2,11 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  DestroyRef,
   inject,
-  OnDestroy,
   OnInit,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -20,7 +21,6 @@ import { PopupService } from '../../services/popup/popup.service';
 import { LoginService } from '../../services/login/login.service';
 import { LoginUser } from '../../interfaces';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -36,7 +36,7 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent implements OnInit {
   private fb = inject(FormBuilder);
   private _http = inject(HttpClient);
   private router = inject(Router);
@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   private loginService = inject(LoginService);
   private dialogRef = inject(MatDialogRef<LoginComponent>);
   private cdr = inject(ChangeDetectorRef);
-  private destroy$ = new Subject<void>();
+  private destroyRef = inject(DestroyRef);
 
   isLoading = false;
 
@@ -98,7 +98,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         .post<LoginUser>(Constants.LOGIN_USER, body.toString(), {
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         })
-        .pipe(takeUntil(this.destroy$))
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (res: LoginUser) => {
             this.loginService.loginUser(res.access_token, res.user_id);
@@ -145,7 +145,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
       this._http
         .post(Constants.CREATE_USER, formData)
-        .pipe(takeUntil(this.destroy$))
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
             this.popupService.showAlertMessage(
@@ -168,10 +168,5 @@ export class LoginComponent implements OnInit, OnDestroy {
           },
         });
     }
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }

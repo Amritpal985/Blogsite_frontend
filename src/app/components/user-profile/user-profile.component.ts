@@ -2,10 +2,11 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  DestroyRef,
   inject,
-  OnDestroy,
   OnInit,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -18,7 +19,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { PopupService } from '../../services/popup/popup.service';
 import { Constants } from '../../constants';
 import { LoginService } from '../../services/login/login.service';
-import { Subject, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { User } from '../../interfaces';
 import { HttpClient } from '@angular/common/http';
@@ -42,14 +42,14 @@ import { SkeletonModule } from 'primeng/skeleton';
   styleUrl: './user-profile.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserProfileComponent implements OnInit, OnDestroy {
+export class UserProfileComponent implements OnInit {
   private popupService = inject(PopupService);
   private loginService = inject(LoginService);
   private _http = inject(HttpClient);
   private router = inject(Router);
   private fb = inject(FormBuilder);
   private cdr = inject(ChangeDetectorRef);
-  private destroy$ = new Subject<void>();
+  private destroyRef = inject(DestroyRef);
 
   user!: User;
   profileForm!: FormGroup;
@@ -59,7 +59,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.loginService.loginSubject$
       .asObservable()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         const isUserLoggedIn = this.loginService.isUserLoggedIn();
         if (!isUserLoggedIn) this.router.navigate(['']);
@@ -71,7 +71,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   private getUserDetails() {
     this._http
       .get<User>(Constants.GET_USER_INFO)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (res) => {
           this.user = res;
@@ -125,7 +125,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     if (pwd) formData.append('password', pwd);
     this._http
       .put(Constants.UPDATE_USER_INFO, formData)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.popupService.showAlertMessage(
@@ -141,10 +141,5 @@ export class UserProfileComponent implements OnInit, OnDestroy {
           this.cdr.markForCheck();
         },
       });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }

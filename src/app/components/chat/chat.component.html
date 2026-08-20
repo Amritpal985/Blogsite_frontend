@@ -8,7 +8,7 @@
       @for (follower of followers; track follower) {
         <div
           class="chat-tile mat-elevation-z1"
-          [ngClass]="follower.id === activeChatId ? 'active' : ''"
+          [class.active]="follower.id === activeChatId"
           (click)="onChatChange(follower.id)"
         >
           <div class="chat-name">{{ follower.username }}</div>
@@ -28,7 +28,8 @@
       @for (message of chatMessages; track message) {
         <div
           class="message mat-elevation-z1"
-          [ngClass]="message.sender_id === activeChatId ? ' received ' : 'sent'"
+          [class.received]="message.sender_id === activeChatId"
+          [class.sent]="message.sender_id !== activeChatId"
         >
           {{ message.message }}
         </div>

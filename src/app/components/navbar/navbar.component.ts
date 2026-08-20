@@ -2,15 +2,15 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  DestroyRef,
   inject,
-  OnDestroy,
   OnInit,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { Router, RouterModule } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { Router, RouterLink } from '@angular/router';
 import { LoginService } from '../../services/login/login.service';
 import { LoginComponent } from '../login/login.component';
 import { PopupService } from '../../services/popup/popup.service';
@@ -18,25 +18,25 @@ import { Constants } from '../../constants';
 
 @Component({
   selector: 'app-navbar',
-  imports: [MatIconModule, MatToolbarModule, RouterModule, MatDialogModule],
+  imports: [MatIconModule, MatToolbarModule, RouterLink, MatDialogModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NavbarComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<void>();
+export class NavbarComponent implements OnInit {
   private loginService = inject(LoginService);
   private dialog = inject(MatDialog);
   private popupService = inject(PopupService);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
+  private destroyRef = inject(DestroyRef);
 
   isLoggedIn = false;
 
   ngOnInit(): void {
     this.loginService.loginSubject$
       .asObservable()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.isLoggedIn = this.loginService.isUserLoggedIn();
         this.cdr.markForCheck();
@@ -66,13 +66,5 @@ export class NavbarComponent implements OnInit, OnDestroy {
   logout() {
     this.loginService.logoutUser();
     this.popupService.showAlertMessage(Constants.LOGOUT_MSG, Constants.SNACKBAR_SUCCESS);
-  }
-
-  /**
-   * Cleans up any pending subscriptions.
-   */
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 }

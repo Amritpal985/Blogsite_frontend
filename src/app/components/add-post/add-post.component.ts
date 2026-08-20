@@ -1,5 +1,13 @@
-import { CommonModule } from '@angular/common';
-import { Component, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -27,7 +35,6 @@ import { Router } from '@angular/router';
   selector: 'app-add-post',
   standalone: true,
   imports: [
-    CommonModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
@@ -40,10 +47,12 @@ import { Router } from '@angular/router';
   ],
   templateUrl: './add-post.component.html',
   styleUrl: './add-post.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddPostComponent implements OnInit, OnDestroy {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
+  private cdr = inject(ChangeDetectorRef);
   private popupService = inject(PopupService);
   private loginService = inject(LoginService);
   private fb = inject(FormBuilder);
@@ -147,19 +156,23 @@ export class AddPostComponent implements OnInit, OnDestroy {
     formData.append('content', this.form.get('content')?.value);
     formData.append('tag', this.form.get('tags')?.value);
     formData.append('image', this.form.get('image')?.value);
-    this._http.post(Constants.CREATE_POST, formData).subscribe(
-      (res: any) => { // eslint-disable-line
-        this.form.reset();
-        this.fileInput.nativeElement.value = '';
-        this.popupService.showAlertMessage(
-          res?.message || Constants.POST_CREATED_MSG,
-          Constants.SNACKBAR_SUCCESS
-        );
-      },
-      () => {
-        this.popupService.showAlertMessage(Constants.GENERIC_MSG, Constants.SNACKBAR_ERROR);
-      }
-    );
+    this._http
+      .post<{ message?: string }>(Constants.CREATE_POST, formData)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this.form.reset();
+          this.fileInput.nativeElement.value = '';
+          this.cdr.markForCheck();
+          this.popupService.showAlertMessage(
+            res?.message || Constants.POST_CREATED_MSG,
+            Constants.SNACKBAR_SUCCESS
+          );
+        },
+        error: () => {
+          this.popupService.showAlertMessage(Constants.GENERIC_MSG, Constants.SNACKBAR_ERROR);
+        },
+      });
   }
 
   /**

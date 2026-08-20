@@ -14,6 +14,7 @@ import { Constants } from '../../constants';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { WebSocketService } from '../../services/websocket/websocket.service';
+import { PopupService } from '../../services/popup/popup.service';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
@@ -26,6 +27,7 @@ import { Subject, takeUntil } from 'rxjs';
 export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
   private _http = inject(HttpClient);
   private wsService = inject(WebSocketService);
+  private popupService = inject(PopupService);
   private destroy$ = new Subject<void>();
 
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
@@ -36,16 +38,19 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
   messageToSend = '';
 
   ngOnInit(): void {
-    this._http.get<Follower[]>(Constants.GET_ALL_FOLLOWERS).subscribe(
-      (res: any) => {// eslint-disable-line
-        this.followers = res.followers;
-        this.activeChatId = this.followers[0]?.id;
-        if (this.activeChatId) this.getChatMessages(this.activeChatId);
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
+    this._http
+      .get<{ followers: Follower[] }>(Constants.GET_ALL_FOLLOWERS)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this.followers = res.followers;
+          this.activeChatId = this.followers[0]?.id;
+          if (this.activeChatId) this.getChatMessages(this.activeChatId);
+        },
+        error: () => {
+          this.popupService.showAlertMessage(Constants.GENERIC_MSG, Constants.SNACKBAR_ERROR);
+        },
+      });
     const url = `${Constants.WEBSOCKET_MESSAGE_URL}/${localStorage.getItem('user_id')}`;
     this.wsService.connect(url);
     this.wsService.messages$.pipe(takeUntil(this.destroy$)).subscribe((msg) => {
@@ -57,7 +62,7 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
   ngAfterViewChecked(): void {
     try {
       this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
-    } catch (error) { // eslint-disable-line
+    } catch {
       // do nothing
     }
   }
@@ -69,14 +74,17 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
   getChatMessages(userId: number) {
     this.chatMessages = [];
     const url = `${Constants.GET_CHAT_HISTORY}/${userId}`;
-    this._http.get<ChatMessage[]>(url).subscribe(
-      (res: any) => {// eslint-disable-line
-        this.chatMessages = res.messages;
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
+    this._http
+      .get<{ messages: ChatMessage[] }>(url)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this.chatMessages = res.messages;
+        },
+        error: () => {
+          this.popupService.showAlertMessage(Constants.GENERIC_MSG, Constants.SNACKBAR_ERROR);
+        },
+      });
   }
 
   /**

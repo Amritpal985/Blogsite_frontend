@@ -1,5 +1,7 @@
-const hostURL = 'https://blogsite-backend-p8w3.onrender.com/';
-const webSocketURL = 'wss://blogsite-backend-p8w3.onrender.com/';
+import { environment } from '../../environments/environment';
+
+const hostURL = environment.hostURL;
+const webSocketURL = environment.webSocketURL;
 
 export class Constants {
   // urls

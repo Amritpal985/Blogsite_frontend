@@ -1,6 +1,6 @@
 #top {
   color: #e3edf7;
-  background: url("../../../assets/posts-home-bg.jpg") no-repeat center center/cover;
+  background: url('../../../assets/posts-home-bg.jpg') no-repeat center center/cover;
   min-height: 50vh;
   display: flex;
   flex-direction: column;
@@ -51,7 +51,8 @@
   justify-content: flex-start;
 }
 
-.tags, .author-name {
+.tags,
+.author-name {
   flex: 1 1 250px;
   min-width: 220px;
 }
@@ -73,7 +74,9 @@
   border-radius: 8px;
   border: none;
   box-shadow: 0 5px 15px rgba(79, 129, 168, 0.5);
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
   cursor: pointer;
 }
 
@@ -145,7 +148,8 @@ mat-label {
   color: #5f7487 !important;
 }
 
-.mat-select-value-text, input.mat-input-element {
+.mat-select-value-text,
+input.mat-input-element {
   color: #2f3f50 !important;
 }
 
@@ -179,7 +183,9 @@ mat-label {
     align-items: stretch;
   }
 
-  .tags, .author-name, .search-button {
+  .tags,
+  .author-name,
+  .search-button {
     flex: 1 1 100%;
     margin: 0 !important;
   }
@@ -205,7 +211,10 @@ mat-label {
   border-radius: 8px;
   border: none;
   box-shadow: 0 4px 12px rgba(79, 129, 168, 0.35);
-  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.2s ease;
 }
 
 .pagination-buttons button:hover {

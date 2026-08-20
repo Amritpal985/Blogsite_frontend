@@ -1,5 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  inject,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
@@ -34,6 +42,7 @@ import { Subject, takeUntil } from 'rxjs';
   ],
   templateUrl: './comment.component.html',
   styleUrl: './comment.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CommentComponent implements OnInit, OnDestroy {
   @Input() postId!: number;
@@ -41,6 +50,7 @@ export class CommentComponent implements OnInit, OnDestroy {
   private loginService = inject(LoginService);
   private popupService = inject(PopupService);
   private _http = inject(HttpClient);
+  private cdr = inject(ChangeDetectorRef);
 
   private destroy$ = new Subject<void>();
   avatar = '/assets/comment-avatar.png';
@@ -58,17 +68,20 @@ export class CommentComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.commentsLoading = true;
     const url = `${Constants.GET_COMMENTS}/${this.postId}`;
-    this._http.get<CommentNode[]>(url).subscribe(
-      (res) => {
-        this.comments = res;
-        this.commentsLoading = false;
-      },
-      (err) => {
-        console.log(err);
-        this.commentsLoading = false;
-      }
-    );
-    // localStorage.setItem("token","dakdbds");
+    this._http
+      .get<CommentNode[]>(url)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this.comments = res;
+          this.commentsLoading = false;
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.commentsLoading = false;
+          this.cdr.markForCheck();
+        },
+      });
     this.loginService.loginSubject$
       .asObservable()
       .pipe(takeUntil(this.destroy$))
@@ -81,6 +94,7 @@ export class CommentComponent implements OnInit, OnDestroy {
           this.replyingToId = null;
           this.replyText = '';
         }
+        this.cdr.markForCheck();
       });
   }
 
@@ -95,25 +109,29 @@ export class CommentComponent implements OnInit, OnDestroy {
     this.submitting = true;
     const content = this.commentText;
     const url = `${Constants.ADD_COMMENT}/${this.postId}`;
-    this._http.post<CommentResponse>(url, { content }).subscribe(
-      (res) => {
-        this.commentText = '';
-        this.comments = [
-          ...this.comments,
-          {
-            id: res.comment.id,
-            author_name: res.comment.author_name,
-            content,
-          },
-        ];
-        this.submitting = false;
-        this.popupService.showAlertMessage(res.message, Constants.SNACKBAR_SUCCESS);
-      },
-      (err) => {
-        console.log(err);
-        this.submitting = false;
-      }
-    );
+    this._http
+      .post<CommentResponse>(url, { content })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this.commentText = '';
+          this.comments = [
+            ...this.comments,
+            {
+              id: res.comment.id,
+              author_name: res.comment.author_name,
+              content,
+            },
+          ];
+          this.submitting = false;
+          this.popupService.showAlertMessage(res.message, Constants.SNACKBAR_SUCCESS);
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.submitting = false;
+          this.cdr.markForCheck();
+        },
+      });
   }
 
   /**
@@ -148,26 +166,31 @@ export class CommentComponent implements OnInit, OnDestroy {
     if (!content) return;
 
     const url = `${Constants.REPLY_TO_COMMENT}/${parent.id}`;
-    this._http.post<CommentResponse>(url, { content }).subscribe(
-      (res) => {
-        const reply: CommentNode = {
-          id: res.comment.id,
-          author_name: res.comment.author_name,
-          content,
-          children: [],
-        };
-        if (!parent.children) {
-          parent.children = [];
-        }
-        parent.children.push(reply);
-        this.replyingToId = null;
-        this.replyText = '';
-        this.popupService.showAlertMessage(res.message, Constants.SNACKBAR_SUCCESS);
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
+    this._http
+      .post<CommentResponse>(url, { content })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          const reply: CommentNode = {
+            id: res.comment.id,
+            author_name: res.comment.author_name,
+            content,
+            children: [],
+          };
+          if (!parent.children) {
+            parent.children = [];
+          }
+          parent.children.push(reply);
+          this.replyingToId = null;
+          this.replyText = '';
+          this.popupService.showAlertMessage(res.message, Constants.SNACKBAR_SUCCESS);
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.popupService.showAlertMessage(Constants.GENERIC_MSG, Constants.SNACKBAR_ERROR);
+          this.cdr.markForCheck();
+        },
+      });
   }
 
   /**

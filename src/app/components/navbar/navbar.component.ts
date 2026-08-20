@@ -1,4 +1,11 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -15,6 +22,7 @@ import { Constants } from '../../constants';
   imports: [MatIconModule, MatToolbarModule, RouterModule, MatDialogModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
@@ -22,6 +30,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private dialog = inject(MatDialog);
   private popupService = inject(PopupService);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   isLoggedIn = false;
 
@@ -31,6 +40,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.isLoggedIn = this.loginService.isUserLoggedIn();
+        this.cdr.markForCheck();
       });
   }
 

@@ -1,37 +1,36 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './components/home/home.component';
-import { PostsComponent } from './components/posts/posts.component';
-import { AddPostComponent } from './components/add-post/add-post.component';
 import { authGuard, pageLeaveCheck } from './guards/auth.guard';
-import { PostComponent } from './components/post/post.component';
-import { UserProfileComponent } from './components/user-profile/user-profile.component';
 
 export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    component: HomeComponent,
+    loadComponent: () => import('./components/home/home.component').then((m) => m.HomeComponent),
   },
   {
     path: 'posts',
     pathMatch: 'full',
-    component: PostsComponent,
+    loadComponent: () => import('./components/posts/posts.component').then((m) => m.PostsComponent),
   },
   {
     path: 'add-post',
     pathMatch: 'full',
     canActivate: [authGuard],
     canDeactivate: [pageLeaveCheck],
-    component: AddPostComponent,
+    loadComponent: () =>
+      import('./components/add-post/add-post.component').then((m) => m.AddPostComponent),
   },
   {
     path: 'post/:id',
     pathMatch: 'full',
-    component: PostComponent,
+    loadComponent: () => import('./components/post/post.component').then((m) => m.PostComponent),
   },
   {
     path: 'user-profile',
     pathMatch: 'full',
-    component: UserProfileComponent,
+    loadComponent: () =>
+      import('./components/user-profile/user-profile.component').then(
+        (m) => m.UserProfileComponent
+      ),
   },
 ];

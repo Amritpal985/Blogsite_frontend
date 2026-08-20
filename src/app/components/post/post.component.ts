@@ -1,4 +1,11 @@
-import { Component, inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Post } from '../../interfaces';
 import { HttpClient } from '@angular/common/http';
@@ -11,6 +18,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import DOMPurify from 'dompurify';
 import { CommentComponent } from '../comment/comment.component';
 import { SkeletonModule } from 'primeng/skeleton';
+import { Subject, switchMap, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-post',
@@ -26,12 +34,15 @@ import { SkeletonModule } from 'primeng/skeleton';
   ],
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PostComponent implements OnInit {
+export class PostComponent implements OnInit, OnDestroy {
   editor!: Editor;
   private route = inject(ActivatedRoute);
   private _http = inject(HttpClient);
   private popupService = inject(PopupService);
+  private cdr = inject(ChangeDetectorRef);
+  private destroy$ = new Subject<void>();
 
   isLoading = false;
   postId: string | null = null;
@@ -40,26 +51,38 @@ export class PostComponent implements OnInit {
   ngOnInit(): void {
     this.editor = new Editor();
     this.isLoading = true;
-    this.route.paramMap.subscribe((params) => {
-      this.postId = params.get('id');
-    });
-    const url = `${Constants.GET_POST}/${this.postId}`;
-    this._http.get<Post>(url).subscribe(
-      (res) => {
-        this.post = res;
-        this.post = {
-          ...this.post,
-          formatted_tags: this.post?.tags?.split(','),
-          content: DOMPurify.sanitize(this.post.content, {
-            ALLOWED_TAGS: ['b', 'i', 'a', 'ul', 'li'],
-          }),
-        };
-        this.isLoading = false;
-      },
-      () => {
-        this.isLoading = false;
-        this.popupService.showAlertMessage(Constants.GENERIC_MSG, Constants.SNACKBAR_ERROR);
-      }
-    );
+    this.route.paramMap
+      .pipe(
+        switchMap((params) => {
+          this.postId = params.get('id');
+          const url = `${Constants.GET_POST}/${this.postId}`;
+          return this._http.get<Post>(url);
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (res) => {
+          this.post = {
+            ...res,
+            formatted_tags: res?.tags?.split(','),
+            content: DOMPurify.sanitize(res.content, {
+              ALLOWED_TAGS: ['b', 'i', 'a', 'ul', 'li'],
+            }),
+          };
+          this.isLoading = false;
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.isLoading = false;
+          this.popupService.showAlertMessage(Constants.GENERIC_MSG, Constants.SNACKBAR_ERROR);
+          this.cdr.markForCheck();
+        },
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.editor.destroy();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

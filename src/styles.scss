@@ -1,7 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
 
 .mat-mdc-snack-bar-container {
   &.snackbar-success {
@@ -38,7 +44,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .mdc-tab--active .mdc-tab__text-label {
   color: black !important;
-  font-family: monospace
+  font-family: monospace;
 }
 
 .login-dialog-backdrop {
@@ -62,7 +68,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   background: white !important;
   padding: 0 1rem !important;
   border-radius: 0 0.7rem 0 0.7rem !important;
-
 }
 
 .leave-page-dialog-panel .mat-mdc-dialog-container {

@@ -24,14 +24,14 @@
   </nz-comment-content>
 </nz-comment>
 
-<div *ngIf="commentsLoading; else commentsLoaded" class="dots-loader">
-  <div></div>
-  <div></div>
-  <div></div>
-  <p>Loading comments...</p>
-</div>
-
-<ng-template #commentsLoaded>
+@if (commentsLoading) {
+  <div class="dots-loader">
+    <div></div>
+    <div></div>
+    <div></div>
+    <p>Loading comments...</p>
+  </div>
+} @else {
   <!-- list of comments -->
   <nz-list
     [nzDataSource]="comments"
@@ -39,7 +39,7 @@
     [nzItemLayout]="'horizontal'"
     nzNoResult="No comments yet"
   ></nz-list>
-</ng-template>
+}
 
 <ng-template #item let-item>
   <ng-container *ngTemplateOutlet="commentTemplateRef; context: { comment: item }"> </ng-container>

@@ -5,14 +5,15 @@
     </div>
 
     <div class="chat-list">
-      <div
-        class="chat-tile mat-elevation-z1"
-        *ngFor="let follower of followers"
-        [ngClass]="follower.id === activeChatId ? 'active' : ''"
-        (click)="onChatChange(follower.id)"
-      >
-        <div class="chat-name">{{ follower.username }}</div>
-      </div>
+      @for (follower of followers; track follower) {
+        <div
+          class="chat-tile mat-elevation-z1"
+          [ngClass]="follower.id === activeChatId ? 'active' : ''"
+          (click)="onChatChange(follower.id)"
+        >
+          <div class="chat-name">{{ follower.username }}</div>
+        </div>
+      }
     </div>
   </aside>
 
@@ -24,13 +25,14 @@
     </div>
 
     <div class="chat-messages" #chatContainer>
-      <div
-        *ngFor="let message of chatMessages"
-        class="message mat-elevation-z1"
-        [ngClass]="message.sender_id === activeChatId ? ' received ' : 'sent'"
-      >
-        {{ message.message }}
-      </div>
+      @for (message of chatMessages; track message) {
+        <div
+          class="message mat-elevation-z1"
+          [ngClass]="message.sender_id === activeChatId ? ' received ' : 'sent'"
+        >
+          {{ message.message }}
+        </div>
+      }
     </div>
 
     <div class="chat-input mat-elevation-z3">

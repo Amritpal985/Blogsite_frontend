@@ -8,7 +8,7 @@ import { Constants } from '../../constants';
   providedIn: 'root',
 })
 export class WebSocketService {
-  private socket!: WebSocket;
+  private socket?: WebSocket;
   private messageSubject = new Subject<ChatMessage>();
   private popupService = inject(PopupService);
 
@@ -27,10 +27,6 @@ export class WebSocketService {
     this.socket.onerror = () => {
       this.popupService.showAlertMessage(Constants.WEBSOCKET_ERROR_MSG, Constants.SNACKBAR_ERROR);
     };
-
-    this.socket.onclose = () => {
-      //
-    };
   }
 
   /**
@@ -48,7 +44,7 @@ export class WebSocketService {
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
       this.socket.send(JSON.stringify(message));
     } else {
-      console.warn('WebSocket is not open.');
+      this.popupService.showAlertMessage(Constants.WEBSOCKET_ERROR_MSG, Constants.SNACKBAR_ERROR);
     }
   }
 

@@ -1,88 +1,88 @@
 .navbar {
-    padding: 1rem 2rem;
-    transition: all 0.3s ease;
+  padding: 1rem 2rem;
+  transition: all 0.3s ease;
 }
 
 .site-icon {
-    background-image: url("../../../assets/blog-icon.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    display: block;
-    width: 3.5rem;
-    height: 3.5rem;
-    transition: transform 0.3s ease;
+  background-image: url('../../../assets/blog-icon.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: block;
+  width: 3.5rem;
+  height: 3.5rem;
+  transition: transform 0.3s ease;
 }
 
 .site-icon:hover {
-    transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 .navbar-nav {
-    gap: 1.5rem;
-    align-items: center;
+  gap: 1.5rem;
+  align-items: center;
 }
 
 .navbar-nav .nav-item .nav-link {
-    color: #a100a1 !important;
-    font-size: 1.3rem;
-    position: relative;
-    transition: color 0.3s ease;
-    padding: 0.5rem;
+  color: #a100a1 !important;
+  font-size: 1.3rem;
+  position: relative;
+  transition: color 0.3s ease;
+  padding: 0.5rem;
 }
 
 .navbar-nav .nav-item .nav-link::after {
-    content: "";
-    display: block;
-    height: 2px;
-    background-color: #a100a1;
-    width: 0;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    transition: width 0.3s ease;
+  content: '';
+  display: block;
+  height: 2px;
+  background-color: #a100a1;
+  width: 0;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transition: width 0.3s ease;
 }
 
 .navbar-nav .nav-item .nav-link:hover::after {
-    width: 100%;
+  width: 100%;
 }
 
 .navbar-nav .nav-item .nav-link:hover {
-    color: #6b006b !important;
+  color: #6b006b !important;
 }
 
 a.login_icons {
-    color: #a100a1 !important;
-    margin-left: 1rem;
-    display: flex;
-    align-items: center;
-    transition: transform 0.3s ease;
+  color: #a100a1 !important;
+  margin-left: 1rem;
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease;
 }
 
 a.login_icons:hover {
-    transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 @media (max-width: 1000px) {
-    .navbar-nav {
-        flex-direction: column;
-        align-items: flex-start;
-        padding-top: 1rem;
-        gap: 1rem;
-    }
+  .navbar-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: 1rem;
+    gap: 1rem;
+  }
 
-    a.login_icons {
-        margin: 1rem 0 0 0;
-        justify-content: flex-start;
-    }
+  a.login_icons {
+    margin: 1rem 0 0 0;
+    justify-content: flex-start;
+  }
 
-    a.login_icons:hover {
-        transform: none;
-    }
+  a.login_icons:hover {
+    transform: none;
+  }
 
-    .navbar-collapse {
-        background-color: rgba(255, 255, 255, 0.5);
-        padding: 1rem;
-        border-radius: 0.5rem;
-    }
+  .navbar-collapse {
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 1rem;
+    border-radius: 0.5rem;
+  }
 }

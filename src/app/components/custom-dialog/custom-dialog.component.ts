@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
   imports: [MatButtonModule, MatDialogModule],
   templateUrl: './custom-dialog.component.html',
   styleUrl: './custom-dialog.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomDialogComponent {
   private dialogRef = inject(MatDialogRef<CustomDialogComponent>);

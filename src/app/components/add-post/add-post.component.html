@@ -1,30 +1,35 @@
-<div id="parent" class="d-flex flex-column">
-  <div class="instructions-container my-4 py-3 px-4 shadow-sm rounded">
-    <div class="instructions">
-      <h3 class="text-primary mb-3">Important Instructions</h3>
-      <ul class="instruction-list">
-        <li>Write thoughtfully, be respectful, and avoid harmful language.</li>
-        <li>Add relevant tags to help your post get discovered.</li>
-        <li>Upload high-quality images (max 2MB).</li>
-        <li>Respect others’ opinions, no spam or offensive content.</li>
-      </ul>
-    </div>
-  </div>
+<div class="container-fluid">
+  <header class="page-head">
+    <span class="eyebrow">New story</span>
+    <h1 class="page-title">Write a new story</h1>
+    <p class="page-sub">Share something worth reading. Draft it here, publish when it feels right.</p>
+  </header>
 
-  <div class="container d-flex flex-column">
-    <form [formGroup]="form" class="post-form">
-      <div class="title mb-4">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Enter title here...</mat-label>
-          <input type="text" matInput formControlName="title" />
-        </mat-form-field>
-      </div>
+  <div class="layout">
+    <main class="compose-card">
+      <form [formGroup]="form" class="post-form">
+        <input
+          class="title-input"
+          type="text"
+          formControlName="title"
+          placeholder="Your story title"
+          aria-label="Story title"
+        />
 
-      <div class="file-upload mb-4">
-        <input type="file" class="form-control" (change)="onFileChange($event)" #fileInput />
-      </div>
+        <label class="cover-upload">
+          <input type="file" accept="image/*" (change)="onFileChange($event)" #fileInput hidden />
+          <mat-icon>add_photo_alternate</mat-icon>
+          <span class="cover-upload-text">
+            @if (form.value.image) {
+              <strong>{{ form.value.image.name }}</strong>
+              <small>Click to replace the cover image</small>
+            } @else {
+              <strong>Add a cover image</strong>
+              <small>PNG or JPG, up to 2&nbsp;MB</small>
+            }
+          </span>
+        </label>
 
-      <div class="content mb-5">
         <quill-editor
           class="content-editor"
           formControlName="content"
@@ -32,10 +37,8 @@
           theme="snow"
           placeholder="Write your post here..."
         ></quill-editor>
-      </div>
 
-      <div class="tags mb-4">
-        <mat-form-field appearance="outline" class="w-100">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="tags-field">
           <mat-label>Tags</mat-label>
           <mat-select multiple formControlName="tags">
             <mat-select-trigger>
@@ -43,8 +46,8 @@
                 @for (tag of form.value.tags; track tag) {
                   <mat-chip (removed)="removeTag(tag)">
                     {{ tag }}
-                    <button matChipRemove>
-                      <mat-icon>cancel</mat-icon>
+                    <button matChipRemove aria-label="Remove tag">
+                      <mat-icon>close</mat-icon>
                     </button>
                   </mat-chip>
                 }
@@ -56,9 +59,25 @@
             }
           </mat-select>
         </mat-form-field>
-      </div>
 
-      <button mat-raised-button color="primary" class="post-btn" (click)="savePost()">Post</button>
-    </form>
+        <div class="form-footer">
+          <button mat-flat-button type="button" class="publish-btn" (click)="savePost()">
+            Publish story
+          </button>
+        </div>
+      </form>
+    </main>
+
+    <aside class="rail">
+      <div class="rail-card">
+        <h2 class="rail-title">Publishing guidelines</h2>
+        <ul class="guide-list">
+          <li>Write thoughtfully, be respectful, and avoid harmful language.</li>
+          <li>Add relevant tags to help your post get discovered.</li>
+          <li>Upload a high-quality cover image (max 2&nbsp;MB).</li>
+          <li>Respect others’ opinions — no spam or offensive content.</li>
+        </ul>
+      </div>
+    </aside>
   </div>
 </div>

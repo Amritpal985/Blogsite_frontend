@@ -48,10 +48,11 @@
 <!-- comments nesting -->
 <ng-template #commentTemplateRef let-comment="comment">
   <nz-comment [nzAuthor]="comment.author_name">
-    <nz-avatar
-      nz-comment-avatar
-      [nzSrc]="comment.image ? 'data:image/png;base64,' + comment.image : avatar"
-    ></nz-avatar>
+    @if (comment.image) {
+      <nz-avatar nz-comment-avatar [nzSrc]="'data:image/png;base64,' + comment.image"></nz-avatar>
+    } @else {
+      <nz-avatar nz-comment-avatar [nzText]="comment.author_name.charAt(0).toUpperCase()"></nz-avatar>
+    }
     <nz-comment-content>
       <p>{{ comment.content }}</p>
     </nz-comment-content>
@@ -60,16 +61,14 @@
     </nz-comment-action>
 
     @if (replyingToId === comment.id) {
-      <div style="margin-top: 8px">
+      <div class="reply-box">
         <textarea nz-input [(ngModel)]="replyText" [rows]="2" placeholder="Write a reply...">
         </textarea>
-        <div style="margin-top: 8px">
-          <button nz-button nzType="primary" size="small" (click)="submitReply(comment)">
+        <div class="reply-actions">
+          <button nz-button nzType="primary" nzSize="small" (click)="submitReply(comment)">
             Submit
           </button>
-          <button nz-button size="small" style="margin-left: 8px" (click)="cancelReply()">
-            Cancel
-          </button>
+          <button nz-button nzSize="small" (click)="cancelReply()">Cancel</button>
         </div>
       </div>
     }

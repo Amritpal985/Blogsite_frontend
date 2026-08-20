@@ -1,7 +1,156 @@
+:host {
+  display: block;
+  font-family: var(--font-sans);
+}
+
+/* ---- comment / reply input ---- */
+:host ::ng-deep .ant-input {
+  border-radius: 12px !important;
+  border: 1px solid var(--line) !important;
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+  font-family: var(--font-sans);
+  padding: 0.7rem 0.9rem !important;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+:host ::ng-deep .ant-input::placeholder {
+  color: #9a93ad;
+}
+
+:host ::ng-deep .ant-input:hover {
+  border-color: #d9cef2 !important;
+}
+
+:host ::ng-deep .ant-input:focus {
+  border-color: var(--brand) !important;
+  box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.16) !important;
+}
+
+/* ---- buttons ---- */
+:host ::ng-deep .ant-btn-primary {
+  background: var(--brand) !important;
+  border-color: var(--brand) !important;
+  border-radius: 999px !important;
+  font-weight: 600;
+  box-shadow: 0 6px 16px rgba(109, 40, 217, 0.25) !important;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+:host ::ng-deep .ant-btn-primary:not([disabled]):hover {
+  background: var(--brand-deep) !important;
+  border-color: var(--brand-deep) !important;
+  transform: translateY(-1px);
+}
+
+:host ::ng-deep .ant-btn-primary[disabled] {
+  background: #cbc3e6 !important;
+  border-color: #cbc3e6 !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+:host ::ng-deep .ant-btn:not(.ant-btn-primary) {
+  border-radius: 999px !important;
+  border-color: var(--line) !important;
+  color: var(--ink-soft) !important;
+}
+
+:host ::ng-deep .ant-btn:not(.ant-btn-primary):hover {
+  color: var(--brand) !important;
+  border-color: var(--brand) !important;
+}
+
+/* ---- comment blocks ---- */
+:host ::ng-deep .ant-comment {
+  font-family: var(--font-sans);
+}
+
+:host ::ng-deep .ant-comment-content-author-name,
+:host ::ng-deep .ant-comment-content-author-name > * {
+  color: var(--ink) !important;
+  font-weight: 600 !important;
+  font-size: 0.92rem !important;
+}
+
+:host ::ng-deep .ant-comment-content-detail,
+:host ::ng-deep .ant-comment-content-detail p {
+  color: var(--ink) !important;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* ---- reply action link ---- */
+:host ::ng-deep .ant-comment-actions span {
+  color: var(--brand) !important;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+:host ::ng-deep .ant-comment-actions span:hover {
+  color: var(--brand-deep) !important;
+}
+
+/* ---- avatar (gradient initials) ---- */
+:host ::ng-deep .ant-comment-avatar .ant-avatar {
+  background: linear-gradient(135deg, var(--brand), var(--accent)) !important;
+  color: #fff !important;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(109, 40, 217, 0.22);
+}
+
+/* ---- tighten ng-zorro's generous default comment spacing ---- */
+:host ::ng-deep .ant-comment-inner {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+:host ::ng-deep .ant-comment-actions {
+  margin-top: 6px !important;
+}
+
+/* ---- nested replies: violet guide line ---- */
+:host ::ng-deep .ant-comment-nested {
+  margin-left: 0.5rem;
+  padding-left: 1rem;
+  border-left: 2px solid var(--line);
+}
+
+/* ---- dividers between top-level comments ---- */
+:host ::ng-deep .ant-list-item {
+  border-bottom: 1px solid var(--line) !important;
+  padding: 0.15rem 0 !important;
+}
+
+:host ::ng-deep .ant-list-item:last-child {
+  border-bottom: none !important;
+}
+
+:host ::ng-deep .ant-list-empty-text {
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+/* ---- reply box ---- */
+.reply-box {
+  margin-top: 0.75rem;
+}
+
+.reply-actions {
+  margin-top: 0.75rem;
+  display: flex;
+  gap: 0.6rem;
+}
+
+/* ---- loading dots ---- */
 .dots-loader {
   text-align: center;
   padding: 25px 0;
-  animation: fadeIn 0.3s ease-in-out;
 }
 
 .dots-loader div {
@@ -10,7 +159,7 @@
   height: 10px;
   margin: 0 3px;
   border-radius: 50%;
-  background-color: #1890ff;
+  background-color: var(--brand);
   animation: bounce 0.6s infinite alternate;
 }
 
@@ -22,9 +171,20 @@
   animation-delay: 0.4s;
 }
 
+.dots-loader p {
+  margin-top: 0.5rem;
+  color: var(--ink-soft);
+}
+
 @keyframes bounce {
   to {
     transform: translateY(-8px);
     opacity: 0.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dots-loader div {
+    animation: none;
   }
 }

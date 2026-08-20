@@ -1,33 +1,38 @@
-<div id="chat-app" class="chat-wrapper mb-3 p-3">
-  <aside class="chat-sidebar mat-elevation-z3">
+<div id="chat-app" class="chat-wrapper">
+  <aside class="chat-sidebar">
     <div class="sidebar-header">
-      <h2>Chats</h2>
+      <h2>Messages</h2>
     </div>
 
     <div class="chat-list">
       @for (follower of followers; track follower) {
-        <div
-          class="chat-tile mat-elevation-z1"
+        <button
+          type="button"
+          class="chat-tile"
           [class.active]="follower.id === activeChatId"
           (click)="onChatChange(follower.id)"
         >
-          <div class="chat-name">{{ follower.username }}</div>
-        </div>
+          <span class="tile-avatar">{{ follower.username.charAt(0).toUpperCase() }}</span>
+          <span class="chat-name">{{ follower.username }}</span>
+        </button>
       }
     </div>
   </aside>
 
   <section class="chat-main">
-    <div class="chat-header mat-elevation-z2">
-      <div class="chat-user">
-        <h3>John Doe</h3>
-      </div>
+    <div class="chat-header">
+      @if (activeFollowerName) {
+        <div class="chat-user">
+          <span class="header-avatar">{{ activeFollowerName.charAt(0).toUpperCase() }}</span>
+          <h3>{{ activeFollowerName }}</h3>
+        </div>
+      }
     </div>
 
     <div class="chat-messages" #chatContainer>
       @for (message of chatMessages; track message) {
         <div
-          class="message mat-elevation-z1"
+          class="message"
           [class.received]="message.sender_id === activeChatId"
           [class.sent]="message.sender_id !== activeChatId"
         >
@@ -36,9 +41,20 @@
       }
     </div>
 
-    <div class="chat-input mat-elevation-z3">
-      <input type="text" placeholder="Type a message..." [(ngModel)]="messageToSend" />
-      <button mat-icon-button class="icon-btn send-btn" color="primary" (click)="sendMessage()">
+    <div class="chat-input">
+      <input
+        type="text"
+        placeholder="Type a message..."
+        [(ngModel)]="messageToSend"
+        (keyup.enter)="sendMessage()"
+      />
+      <button
+        type="button"
+        class="send-btn"
+        aria-label="Send message"
+        [disabled]="!messageToSend"
+        (click)="sendMessage()"
+      >
         <mat-icon>send</mat-icon>
       </button>
     </div>

@@ -8,9 +8,10 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { LoginService } from '../../services/login/login.service';
 import { LoginComponent } from '../login/login.component';
 import { PopupService } from '../../services/popup/popup.service';
@@ -18,7 +19,14 @@ import { Constants } from '../../constants';
 
 @Component({
   selector: 'app-navbar',
-  imports: [MatIconModule, MatToolbarModule, RouterLink, MatDialogModule],
+  imports: [
+    MatIconModule,
+    MatButtonModule,
+    MatToolbarModule,
+    RouterLink,
+    RouterLinkActive,
+    MatDialogModule,
+  ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

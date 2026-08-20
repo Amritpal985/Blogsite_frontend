@@ -14,6 +14,7 @@ import { MatCardModule } from '@angular/material/card';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Constants } from '../../constants';
@@ -31,6 +32,7 @@ import { MatDialogRef } from '@angular/material/dialog';
     MatCardModule,
     MatInputModule,
     MatButtonModule,
+    MatIconModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',

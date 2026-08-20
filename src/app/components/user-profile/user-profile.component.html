@@ -1,73 +1,136 @@
-<div class="profile-container">
-  <!-- Profile Header -->
-  <mat-card class="profile-header mt-5">
+<div class="profile-shell">
+  <!-- ===== Author masthead ===== -->
+  <section class="hero">
     @if (isLoading && !user) {
-      <div class="border-round border-1 surface-border surface-card">
-        <div class="d-flex">
-          <p-skeleton shape="circle" size="12rem" styleClass="mr-4" />
-          <div class="ms-4">
-            <p-skeleton width="12rem" styleClass="mb-2 mt-5" />
-            <p-skeleton width="8rem" styleClass="my-4" />
-            <p-skeleton width="25rem" />
-          </div>
+      <div class="hero-skeleton">
+        <p-skeleton shape="circle" size="9rem" />
+        <div class="hero-skeleton-lines">
+          <p-skeleton width="16rem" height="2.4rem" />
+          <p-skeleton width="9rem" />
+          <p-skeleton width="24rem" />
         </div>
       </div>
-    } @else {
-      <img class="avatar" alt="User Avatar" src="data:image/jpeg;base64,{{ user.image }}" />
-      <div class="header-details">
-        <h2>{{ user.fullname }}</h2>
-        <p class="email"><mat-icon>email</mat-icon> {{ user.email }}</p>
-        <h3>{{ user.bio }}</h3>
+    } @else if (user) {
+      <div class="cover"></div>
+
+      <div class="identity">
+        @if (user.image) {
+          <img class="avatar" alt="{{ user.fullname }}" src="data:image/jpeg;base64,{{ user.image }}" />
+        } @else {
+          <div class="avatar avatar-fallback">{{ user.fullname.charAt(0).toUpperCase() }}</div>
+        }
+
+        <div class="identity-text">
+          <h1 class="name">{{ user.fullname }}</h1>
+          <span class="handle">&#64;{{ user.username }}</span>
+          <p class="bio">{{ user.bio }}</p>
+          <a class="email-chip" href="mailto:{{ user.email }}">
+            <mat-icon>mail_outline</mat-icon>
+            <span>{{ user.email }}</span>
+          </a>
+        </div>
       </div>
+
+      <dl class="stats">
+        <div class="stat">
+          <dt>{{ user.total_posts }}</dt>
+          <dd>Posts</dd>
+        </div>
+        <div class="stat">
+          <dt>{{ user.followers }}</dt>
+          <dd>Followers</dd>
+        </div>
+        <div class="stat">
+          <dt>{{ user.following }}</dt>
+          <dd>Following</dd>
+        </div>
+      </dl>
     }
-  </mat-card>
+  </section>
 
-  <!-- Tabs -->
-  <mat-tab-group>
-    <!-- Info Tab -->
-    <mat-tab label="Info">
-      @if (user) {
-        <div>
-          {{ user.about_me }}
+  <!-- ===== Tabbed panels ===== -->
+  <section class="panel">
+    <mat-tab-group animationDuration="240ms" mat-stretch-tabs="false">
+      <!-- About -->
+      <mat-tab label="Info">
+        @if (user) {
+          <div class="tab-body about-panel">
+            <h2 class="panel-title">About</h2>
+            <p class="about-text">{{ user.about_me }}</p>
+          </div>
+        }
+      </mat-tab>
+
+      <!-- Chats -->
+      <mat-tab label="Chats">
+        <div class="tab-body chats-panel">
+          <app-chat></app-chat>
         </div>
-      }
-    </mat-tab>
+      </mat-tab>
 
-    <!-- Chats Tab -->
-    <mat-tab label="Chats">
-      <app-chat></app-chat>
-    </mat-tab>
+      <!-- Update profile -->
+      <mat-tab label="Update Profile">
+        <div class="tab-body update-panel">
+          <header class="panel-head">
+            <h2 class="panel-title">Edit your details</h2>
+            <p class="panel-sub">Update how you appear across The Journal.</p>
+          </header>
 
-    <!-- Update Profile Tab -->
-    <mat-tab label="Update Profile">
-      <div class="update-profile-form">
-        <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
-          <mat-form-field class="full-width">
-            <mat-label>Fullname</mat-label>
-            <input matInput formControlName="fullname" />
-          </mat-form-field>
-          <mat-form-field class="full-width">
-            <mat-label>Username</mat-label>
-            <input matInput formControlName="username" />
-          </mat-form-field>
-          <mat-form-field class="full-width">
-            <mat-label>Email</mat-label>
-            <input matInput type="email" formControlName="email" />
-          </mat-form-field>
-          <mat-form-field class="full-width">
-            <mat-label>New Password</mat-label>
-            <input matInput type="password" formControlName="newPassword" />
-          </mat-form-field>
-          <mat-form-field class="full-width">
-            <mat-label>Confirm Password</mat-label>
-            <input matInput type="password" formControlName="confirmPassword" />
-          </mat-form-field>
+          <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
+            <div class="form-section">
+              <div class="section-label">
+                <h3>Public profile</h3>
+                <p>The name and handle readers see on your posts.</p>
+              </div>
+              <div class="section-fields">
+                <div class="field-row">
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Fullname</mat-label>
+                    <input matInput formControlName="fullname" />
+                  </mat-form-field>
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Username</mat-label>
+                    <input matInput formControlName="username" />
+                    <mat-icon matSuffix aria-label="Read only">lock</mat-icon>
+                  </mat-form-field>
+                </div>
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                  <mat-label>Email</mat-label>
+                  <input matInput type="email" formControlName="email" />
+                  <mat-icon matSuffix aria-label="Read only">lock</mat-icon>
+                </mat-form-field>
+              </div>
+            </div>
 
-          <button mat-raised-button color="primary mb-3" type="submit" [disabled]="!user">
-            Update Profile
-          </button>
-        </form>
-      </div>
-    </mat-tab>
-  </mat-tab-group>
+            <div class="form-divider"></div>
+
+            <div class="form-section">
+              <div class="section-label">
+                <h3>Security</h3>
+                <p>Leave both fields blank to keep your current password.</p>
+              </div>
+              <div class="section-fields">
+                <div class="field-row">
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>New password</mat-label>
+                    <input matInput type="password" formControlName="newPassword" />
+                  </mat-form-field>
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                    <mat-label>Confirm password</mat-label>
+                    <input matInput type="password" formControlName="confirmPassword" />
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-footer">
+              <button mat-flat-button class="save-btn" type="submit" [disabled]="!user">
+                Save changes
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </section>
 </div>

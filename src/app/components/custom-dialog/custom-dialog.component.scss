@@ -1,0 +1,105 @@
+:host {
+  display: block;
+  width: 380px;
+  max-width: 90vw;
+  padding: 1.75rem 1.75rem 1.5rem;
+  font-family: var(--font-sans);
+}
+
+/* ---- header: warning badge + title ---- */
+.dialog-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.dialog-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, #fff);
+}
+
+.dialog-icon mat-icon {
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+}
+
+h2[mat-dialog-title] {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+h2[mat-dialog-title]::before {
+  display: none;
+}
+
+/* ---- message ---- */
+mat-dialog-content {
+  display: block;
+  margin: 0 0 1.6rem;
+  padding: 0 !important;
+  color: var(--ink-soft);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+/* ---- actions ---- */
+mat-dialog-actions {
+  min-height: auto;
+  padding: 0 !important;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+mat-dialog-actions .mat-mdc-button {
+  height: 42px;
+  padding: 0 1.6rem !important;
+  border-radius: 999px !important;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  --mat-text-button-state-layer-color: transparent;
+  --mat-text-button-ripple-color: transparent;
+}
+
+/* "No" = keep editing — primary, safe */
+.btn-stay {
+  color: #fff !important;
+  background: linear-gradient(120deg, var(--brand), var(--accent)) !important;
+  box-shadow: 0 8px 18px rgba(109, 40, 217, 0.25);
+  transition: transform 0.2s ease;
+}
+
+.btn-stay:hover {
+  transform: translateY(-1px);
+}
+
+/* "Yes" = leave / discard — quiet, de-emphasized */
+.btn-leave {
+  color: var(--ink-soft) !important;
+  border: 1px solid var(--line);
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.btn-leave:hover {
+  color: var(--accent) !important;
+  border-color: color-mix(in srgb, var(--accent) 45%, #fff);
+  background: color-mix(in srgb, var(--accent) 8%, #fff) !important;
+}

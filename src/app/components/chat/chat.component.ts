@@ -40,6 +40,11 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
   chatMessages: ChatMessage[] = [];
   messageToSend = '';
 
+  /** Username of the follower whose thread is currently open (drives the chat header). */
+  get activeFollowerName(): string {
+    return this.followers.find((f) => f.id === this.activeChatId)?.username ?? '';
+  }
+
   ngOnInit(): void {
     this._http
       .get<{ followers: Follower[] }>(Constants.GET_ALL_FOLLOWERS)

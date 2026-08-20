@@ -1,13 +1,14 @@
 <div id="parent" class="d-flex flex-column">
-  <div id="top">
+  <header id="top">
+    <span class="eyebrow">Latest writing</span>
     <h1 class="top-title">Discover Posts</h1>
-    <p class="top-sub-title">Explore by tags or author</p>
-  </div>
+    <p class="top-sub-title">Browse the collection by tag or author.</p>
+  </header>
 
   <div id="content" class="mt-4 d-flex flex-column">
     <form [formGroup]="filterForm" class="filter-box">
       <div class="tags">
-        <mat-form-field appearance="outline" class="w-100">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-100">
           <mat-label>Tags</mat-label>
           <mat-select multiple formControlName="tags">
             <mat-option value="art">Art</mat-option>
@@ -18,7 +19,7 @@
       </div>
 
       <div class="author-name">
-        <mat-form-field appearance="outline" class="w-100">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="w-100">
           <mat-label>Author name</mat-label>
           <input matInput placeholder="Enter author name" formControlName="author" />
         </mat-form-field>
@@ -58,19 +59,23 @@
         <div class="posts">
           @for (post of allPosts; track post) {
             <mat-card class="card my-4">
+              @if (post.tags) {
+                <div class="card-tags">
+                  @for (tag of post.tags.split(','); track tag) {
+                    <span class="tag">{{ tag.trim() }}</span>
+                  }
+                </div>
+              }
               <mat-card-header>
                 <mat-card-title>{{ post.title }}</mat-card-title>
               </mat-card-header>
               <mat-card-content [innerHTML]="post.content"></mat-card-content>
-              <mat-card-actions class="d-flex justify-content-between">
-                <div>
-                  <button mat-button (click)="openPost(post.id)">
-                    <mat-icon>open_in_new</mat-icon>
-                  </button>
-                </div>
-                <div>
-                  <button mat-button>{{ post.author.username }}</button>
-                </div>
+              <mat-card-actions class="d-flex justify-content-between align-items-center">
+                <span class="byline">by <span class="author">{{ post.author.username }}</span></span>
+                <button mat-button class="read-btn" (click)="openPost(post.id)">
+                  <span>Read</span>
+                  <mat-icon>arrow_forward</mat-icon>
+                </button>
               </mat-card-actions>
             </mat-card>
           }

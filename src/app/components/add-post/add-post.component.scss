@@ -1,116 +1,394 @@
-#parent {
-  padding-top: 4rem;
-  background: linear-gradient(135deg, #f8f9fa, #e9ecef, #dee2e6);
+/* ===== Page canvas: The Journal lilac paper + grain ===== */
+:host {
+  display: block;
+  position: relative;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(circle, rgba(109, 40, 217, 0.07) 1px, transparent 1.5px),
+    radial-gradient(1000px 520px at 8% -12%, rgba(124, 58, 237, 0.16), transparent 58%),
+    radial-gradient(820px 480px at 100% 0%, rgba(225, 29, 116, 0.1), transparent 55%),
+    radial-gradient(760px 640px at 50% 120%, rgba(109, 40, 217, 0.1), transparent 60%);
+  background-size:
+    24px 24px,
+    100% 100%,
+    100% 100%,
+    100% 100%;
+  background-repeat: repeat, no-repeat, no-repeat, no-repeat;
+  background-attachment: fixed;
 }
 
-.container,
-.instructions-container {
-  width: 90%;
-  max-width: 900px;
-  margin: 1rem auto;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-  padding: 2rem;
-  color: #343a40;
+:host::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-.instructions h3 {
-  color: #3b82f6;
+.container-fluid {
+  position: relative;
+  z-index: 1;
+  padding: 6rem 2rem 5rem;
 }
 
-.instruction-list {
-  padding-left: 1.5rem;
-  line-height: 1.8;
-  font-size: 1rem;
-  color: #495057;
+/* ===== Page header ===== */
+.page-head {
+  max-width: 1160px;
+  margin: 0 auto 2rem;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brand);
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.6vw, 2.8rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+  color: var(--ink);
+  margin: 0.5rem 0 0;
+}
+
+.page-sub {
+  margin: 0.6rem 0 0;
+  color: var(--ink-soft);
+  font-size: 1.02rem;
+}
+
+/* ===== Two-column layout ===== */
+.layout {
+  max-width: 1160px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+.compose-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+  padding: 2.25rem;
 }
 
 .post-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.75rem;
 }
 
-.mat-form-field {
-  background: #fefefe;
-  border-radius: 6px;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 0.05);
-}
-
-input[type='file'] {
-  padding: 0.75rem;
-  background: #fefefe;
-  color: #495057;
-  border: 1px solid #ced4da;
-  border-radius: 6px;
+/* ---- Title as a real headline ---- */
+.title-input {
   width: 100%;
-  box-shadow: inset 0 1px 3px rgb(0 0 0 / 0.05);
+  border: none;
+  outline: none;
+  background: none;
+  padding: 0 0 0.6rem;
+  border-bottom: 2px solid var(--line);
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  transition: border-color 0.2s ease;
 }
 
+.title-input::placeholder {
+  color: #b3aac9;
+  font-weight: 700;
+}
+
+.title-input:focus {
+  border-bottom-color: var(--brand);
+}
+
+/* ---- Cover upload dropzone ---- */
+.cover-upload {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 1.25rem;
+  border: 1.5px dashed #cbbff0;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--paper-deep) 55%, #fff);
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.cover-upload:hover {
+  border-color: var(--brand);
+  background: var(--paper-deep);
+  transform: translateY(-1px);
+}
+
+.cover-upload mat-icon {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  font-size: 44px;
+  line-height: 44px;
+  color: var(--brand);
+}
+
+.cover-upload-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.35;
+  min-width: 0;
+}
+
+.cover-upload-text strong {
+  font-weight: 600;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cover-upload-text small {
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+}
+
+/* ---- Quill editor ---- */
 .content-editor {
   display: block;
-  background: #fff;
-  border-radius: 8px;
-  color: #212529;
-  box-shadow: 0 1px 8px rgb(0 0 0 / 0.04);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
 }
 
-::ng-deep .content-editor .ql-container {
+.content-editor:focus-within {
+  box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.16);
+}
+
+::ng-deep .content-editor .ql-toolbar.ql-snow {
+  border: 1px solid var(--line);
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+  background: color-mix(in srgb, var(--paper-deep) 45%, #fff);
+  padding: 0.6rem 0.75rem;
+}
+
+::ng-deep .content-editor .ql-container.ql-snow {
+  border: 1px solid var(--line);
+  border-top: none;
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
   height: 20rem;
   overflow-y: auto;
-  font-family: 'Segoe UI', sans-serif;
-  color: #212529;
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  color: var(--ink);
 }
 
 ::ng-deep .content-editor .ql-editor {
   min-height: 20rem;
+  line-height: 1.7;
 }
 
-.post-btn {
+::ng-deep .content-editor .ql-editor.ql-blank::before {
+  color: #b3aac9;
+  font-style: normal;
+}
+
+/* toolbar icons pick up the brand on hover / active */
+::ng-deep .content-editor .ql-snow .ql-stroke {
+  stroke: var(--ink-soft);
+}
+
+::ng-deep .content-editor .ql-snow .ql-fill {
+  fill: var(--ink-soft);
+}
+
+::ng-deep .content-editor .ql-snow button:hover .ql-stroke,
+::ng-deep .content-editor .ql-snow button.ql-active .ql-stroke {
+  stroke: var(--brand);
+}
+
+::ng-deep .content-editor .ql-snow button:hover .ql-fill,
+::ng-deep .content-editor .ql-snow button.ql-active .ql-fill {
+  fill: var(--brand);
+}
+
+/* ---- Tags field ---- */
+.tags-field {
   width: 100%;
-  padding: 0.7rem;
-  font-weight: 500;
-  font-size: 1.05rem;
-  border-radius: 8px;
-  color: white;
-  box-shadow: none;
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease,
-    box-shadow 0.3s ease;
-  cursor: pointer;
 }
 
-.post-btn:hover {
-  background-color: #3b82f6;
-  color: white;
+:host ::ng-deep .tags-field {
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-color: var(--line);
+  }
+
+  .mdc-text-field--focused .mdc-notched-outline__leading,
+  .mdc-text-field--focused .mdc-notched-outline__notch,
+  .mdc-text-field--focused .mdc-notched-outline__trailing {
+    border-color: var(--brand) !important;
+    border-width: 2px;
+  }
+
+  .mdc-text-field--focused .mdc-floating-label {
+    color: var(--brand);
+  }
+
+  .mat-mdc-chip.mat-mdc-standard-chip {
+    background: color-mix(in srgb, var(--paper-deep) 60%, #fff) !important;
+    border: 1px solid #ded4f4;
+    border-radius: 999px;
+    box-shadow: none !important;
+  }
+
+  .mat-mdc-chip .mdc-evolution-chip__text-label,
+  .mat-mdc-chip .mat-mdc-chip-action-label {
+    color: var(--ink-soft) !important;
+    font-weight: 500;
+  }
+
+  .mat-mdc-chip .mat-mdc-chip-remove {
+    color: var(--brand) !important;
+    opacity: 0.7;
+    transition:
+      opacity 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .mat-mdc-chip .mat-mdc-chip-remove:hover {
+    opacity: 1;
+    color: var(--accent) !important;
+  }
+
+  .mat-mdc-chip .mat-mdc-chip-remove .mat-icon {
+    color: inherit !important;
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  /* kill Material's grey hover/focus disc on the chip + remove button */
+  .mat-mdc-chip .mat-mdc-chip-focus-overlay,
+  .mat-mdc-chip .mat-mdc-chip-ripple {
+    background: transparent !important;
+  }
 }
 
-mat-select,
-mat-option,
-mat-chip {
-  color: #212529;
+/* ---- Publish ---- */
+.form-footer {
+  display: flex;
+  justify-content: flex-end;
 }
 
-@media (max-width: 768px) {
-  .post-form {
-    padding: 1rem;
+.publish-btn {
+  height: 48px;
+  padding: 0 2.2rem;
+  border-radius: 999px !important;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #fff !important;
+  background: linear-gradient(120deg, var(--brand), var(--accent)) !important;
+  box-shadow: 0 12px 24px rgba(109, 40, 217, 0.28);
+  transition: transform 0.2s ease;
+}
+
+.publish-btn:hover {
+  transform: translateY(-1px);
+}
+
+/* ===== Sticky guidelines rail ===== */
+.rail {
+  position: sticky;
+  top: 6.5rem;
+}
+
+.rail-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 1.5rem 1.6rem;
+  box-shadow: var(--shadow);
+}
+
+.rail-title {
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brand);
+  margin: 0 0 1rem;
+}
+
+.guide-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.guide-list li {
+  position: relative;
+  padding-left: 1.5rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.guide-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5rem;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--brand), var(--accent));
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .container-fluid {
+    padding: 5rem 1.25rem 4rem;
   }
 
-  .instructions-container {
-    padding: 1rem 1.25rem;
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
   }
 
-  ::ng-deep .content-editor .ql-container {
-    height: 15rem;
+  .rail {
+    position: static;
   }
 
-  .post-btn {
-    font-size: 1rem;
+  .compose-card {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .form-footer {
+    justify-content: stretch;
+  }
+
+  .publish-btn {
+    width: 100%;
   }
 }

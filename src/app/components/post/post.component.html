@@ -1,68 +1,41 @@
 <div class="container-fluid">
-  <div class="row justify-content-center">
-    <div class="col-12 col-lg-3 mb-4">
-      <div class="side-box mb-4">
-        <h5 class="title">Tags</h5>
-        @if (post) {
-          <div class="tag-chips d-flex flex-wrap">
-            @for (tag of post.formatted_tags; track tag) {
-              <mat-chip class="me-2 mb-2">{{ tag }}</mat-chip>
-            }
-          </div>
-        }
-        @if (isLoading) {
-          <div class="tag-chips d-flex flex-wrap">
-            <p-skeleton width="5rem" styleClass="mb-2 me-2" borderRadius="16px" height="2rem" />
-            <p-skeleton width="5rem" styleClass="mb-2 " borderRadius="16px" height="2rem" />
-          </div>
-        }
-      </div>
-
-      <div class="side-box mb-4">
-        <h5 class="title">Last updated on</h5>
-        @if (post) {
-          <p class="updated-date">{{ post.updated_at | date: 'medium' }}</p>
-        }
-        @if (isLoading) {
-          <p-skeleton width="100%" styleClass="mb-2 " borderRadius="0.4rem" height="2rem" />
-        }
-      </div>
-    </div>
-
-    <div class="col-12 col-lg-9">
+  <div class="layout">
+    <main class="article">
       @if (post) {
-        <div class="post-title mt-5">{{ post.title }}</div>
-      }
-      @if (post) {
-        <div class="post-submitted-by mt-2">
-          Submitted by {{ post.author.username }} at {{ post.created_at | date: 'medium' }}
+        <h1 class="post-title">{{ post.title }}</h1>
+        <div class="post-submitted-by">
+          <span class="avatar">{{ post.author.username.charAt(0).toUpperCase() }}</span>
+          <span class="by-text">
+            <span class="by-author">{{ post.author.username }}</span>
+            <span class="by-date">{{ post.created_at | date: 'longDate' }}</span>
+          </span>
         </div>
       }
+
       @if (isLoading) {
-        <div class="header-skeleton mt-5">
-          <p-skeleton borderRadius="0.3rem" width="30%" height="2rem" styleClass="mb-2" />
-          <p-skeleton borderRadius="0.3rem" width="100%" height="2.5rem" />
+        <div class="header-skeleton">
+          <p-skeleton width="92%" height="2.75rem" styleClass="mb-2" borderRadius="0.4rem" />
+          <p-skeleton width="55%" height="2.75rem" borderRadius="0.4rem" />
         </div>
       }
 
       <div class="post-content mt-4">
         @if (post) {
-          <img src="../../../assets/posts-home-bg.jpg" alt="Post Image" class="img-fluid rounded" />
+          <img src="../../../assets/posts-home-bg.jpg" alt="Post cover" class="img-fluid rounded" />
         }
         @if (isLoading) {
-          <p-skeleton borderRadius="0.5rem" height="30rem" width="100%" />
+          <p-skeleton borderRadius="0.9rem" height="22rem" width="100%" />
         }
         <div class="post-body mt-4">
           @if (post) {
             <quill-view [content]="post.content" format="html" theme="snow"></quill-view>
           }
           @if (isLoading) {
-            <div>
-              <p-skeleton borderRadius="0.3rem" width="98%" height="1.3rem" styleClass="mb-3" />
-              <p-skeleton borderRadius="0.3rem" width="80%" height="1.3rem" styleClass="mb-3" />
-              <p-skeleton borderRadius="0.3rem" width="95%" height="1.3rem" styleClass="mb-3" />
-              <p-skeleton borderRadius="0.3rem" width="70%" height="1.3rem" styleClass="mb-3" />
-              <p-skeleton borderRadius="0.3rem" width="90%" height="1.3rem" styleClass="mb-3" />
+            <div class="mt-4">
+              <p-skeleton borderRadius="0.3rem" width="98%" height="1.2rem" styleClass="mb-3" />
+              <p-skeleton borderRadius="0.3rem" width="88%" height="1.2rem" styleClass="mb-3" />
+              <p-skeleton borderRadius="0.3rem" width="94%" height="1.2rem" styleClass="mb-3" />
+              <p-skeleton borderRadius="0.3rem" width="70%" height="1.2rem" styleClass="mb-3" />
             </div>
           }
         </div>
@@ -73,6 +46,43 @@
           <app-comment [postId]="post.id"></app-comment>
         </div>
       }
-    </div>
+    </main>
+
+    <aside class="rail">
+      @if (post) {
+        <div class="rail-card author-card">
+          <span class="avatar">{{ post.author.username.charAt(0).toUpperCase() }}</span>
+          <div>
+            <span class="rail-author">{{ post.author.username }}</span>
+            <span class="rail-role">Author</span>
+          </div>
+        </div>
+
+        <div class="rail-card">
+          <h3 class="rail-title">Topics</h3>
+          <div class="post-tags">
+            @for (tag of post.formatted_tags; track tag) {
+              <span class="tag">{{ tag }}</span>
+            }
+          </div>
+        </div>
+
+        <div class="rail-card">
+          <h3 class="rail-title">Details</h3>
+          <dl class="rail-meta">
+            <dt>Published</dt>
+            <dd>{{ post.created_at | date: 'mediumDate' }}</dd>
+            <dt>Last updated</dt>
+            <dd>{{ post.updated_at | date: 'mediumDate' }}</dd>
+          </dl>
+        </div>
+      }
+
+      @if (isLoading) {
+        <div class="rail-card">
+          <p-skeleton height="7rem" borderRadius="0.6rem" />
+        </div>
+      }
+    </aside>
   </div>
 </div>

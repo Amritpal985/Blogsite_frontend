@@ -1,20 +1,26 @@
 <div class="parent">
   <div id="container">
-    <mat-tab-group class="tab-group">
+    <header class="auth-head">
+      <span class="auth-mark">The Journal</span>
+      <p class="auth-sub">Sign in or create an account to start writing.</p>
+    </header>
+
+    <mat-tab-group class="tab-group" mat-stretch-tabs="false">
       <mat-tab label="Login">
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit(true)" class="login-form">
-          <mat-form-field class="full-width">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="full-width">
             <mat-label>Username</mat-label>
             <input matInput formControlName="username" />
           </mat-form-field>
 
-          <mat-form-field class="full-width">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="full-width">
             <mat-label>Password</mat-label>
             <input matInput formControlName="password" type="password" />
           </mat-form-field>
+
           <button
-            mat-raised-button
-            color="primary"
+            mat-flat-button
+            class="auth-btn"
             type="submit"
             [disabled]="isLoading"
             [class.loading-border]="isLoading"
@@ -23,45 +29,56 @@
           </button>
         </form>
       </mat-tab>
+
       <mat-tab label="Signup">
         <form [formGroup]="signupForm" (ngSubmit)="onSubmit(false)" class="signup-form">
-          <mat-form-field class="full-width">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="full-width">
             <mat-label>Full Name</mat-label>
             <input matInput formControlName="fullname" />
           </mat-form-field>
 
-          <mat-form-field class="full-width">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="full-width">
             <mat-label>Username</mat-label>
             <input matInput formControlName="username" />
           </mat-form-field>
 
-          <mat-form-field class="full-width">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="full-width">
             <mat-label>Email</mat-label>
             <input matInput formControlName="email" />
           </mat-form-field>
 
-          <mat-form-field class="full-width">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="full-width">
             <mat-label>Password</mat-label>
             <input matInput formControlName="password" type="password" />
           </mat-form-field>
 
-          <mat-form-field class="full-width">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic" class="full-width">
             <mat-label>Confirm Password</mat-label>
             <input matInput formControlName="confirmPassword" type="password" />
           </mat-form-field>
 
-          <div class="upload-field">
-            <label for="image">Upload Image</label>
-            <input type="file" id="image" (change)="onFileSelected($event)" accept="image/*" />
-          </div>
+          <label class="upload-field">
+            <input type="file" id="image" (change)="onFileSelected($event)" accept="image/*" hidden />
+            <mat-icon>add_photo_alternate</mat-icon>
+            <span class="upload-text">
+              @if (selectedImage) {
+                <strong>{{ selectedImage.name }}</strong>
+                <small>Click to replace</small>
+              } @else {
+                <strong>Profile photo</strong>
+                <small>Optional — PNG or JPG</small>
+              }
+            </span>
+          </label>
+
           <button
-            mat-raised-button
-            color="primary"
+            mat-flat-button
+            class="auth-btn"
             type="submit"
             [disabled]="isLoading"
             [class.loading-border]="isLoading"
           >
-            SignUp
+            Sign up
           </button>
         </form>
       </mat-tab>

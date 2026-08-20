@@ -1,0 +1,5 @@
+<div class="toast toast--{{ data.type }}">
+  <mat-icon class="toast-icon">{{ icons[data.type] }}</mat-icon>
+  <span class="toast-msg">{{ data.message }}</span>
+  <button type="button" class="toast-close" (click)="snackRef.dismiss()">Close</button>
+</div>

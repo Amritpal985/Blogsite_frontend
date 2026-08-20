@@ -12,7 +12,6 @@ import { HttpClient } from '@angular/common/http';
 import { Constants } from '../../constants';
 import { DatePipe } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MatChipsModule } from '@angular/material/chips';
 import { PopupService } from '../../services/popup/popup.service';
 import { QuillViewComponent } from 'ngx-quill';
 import DOMPurify from 'dompurify';
@@ -22,7 +21,7 @@ import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-post',
-  imports: [DatePipe, MatChipsModule, QuillViewComponent, CommentComponent, SkeletonModule],
+  imports: [DatePipe, QuillViewComponent, CommentComponent, SkeletonModule],
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

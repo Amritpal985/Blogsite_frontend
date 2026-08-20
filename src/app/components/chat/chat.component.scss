@@ -30,7 +30,7 @@
   border: none !important;
   width: 40px !important;
   height: 40px !important;
-  color: mat.get-color-from-palette(mat.$indigo-palette, 700);
+  color: mat.m2-get-color-from-palette(mat.$m2-indigo-palette, 700);
 }
 
 .icon-btn:hover {
@@ -122,7 +122,7 @@
 
 .message.sent {
   align-self: flex-end;
-  background: mat.get-color-from-palette(mat.$indigo-palette, 500);
+  background: mat.m2-get-color-from-palette(mat.$m2-indigo-palette, 500);
   color: #fff;
 }
 
@@ -149,7 +149,7 @@
 }
 
 .send-btn {
-  color: mat.get-color-from-palette(mat.$indigo-palette, 600);
+  color: mat.m2-get-color-from-palette(mat.$m2-indigo-palette, 600);
 }
 
 @media (max-width: 768px) {

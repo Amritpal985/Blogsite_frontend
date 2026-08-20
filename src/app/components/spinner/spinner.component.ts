@@ -3,7 +3,6 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-spinner',
-  standalone: true,
   imports: [MatProgressSpinner],
   templateUrl: './spinner.component.html',
   styleUrl: './spinner.component.scss',

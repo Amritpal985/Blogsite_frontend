@@ -19,7 +19,6 @@ import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-chat',
-  standalone: true,
   imports: [CommonModule, MatIconModule, FormsModule],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss',

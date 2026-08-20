@@ -27,7 +27,6 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-post',
-  standalone: true,
   imports: [
     MatFormFieldModule,
     MatInputModule,

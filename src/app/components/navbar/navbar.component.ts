@@ -18,7 +18,6 @@ import { Constants } from '../../constants';
 
 @Component({
   selector: 'app-navbar',
-  standalone: true,
   imports: [MatIconModule, MatToolbarModule, RouterModule, MatDialogModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',

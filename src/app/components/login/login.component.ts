@@ -24,7 +24,6 @@ import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-login',
-  standalone: true,
   imports: [
     MatTabsModule,
     MatFormFieldModule,

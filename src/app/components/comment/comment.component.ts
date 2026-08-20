@@ -27,7 +27,6 @@ import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-comment',
-  standalone: true,
   imports: [
     CommonModule,
     NzAvatarModule,

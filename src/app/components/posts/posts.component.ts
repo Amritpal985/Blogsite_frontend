@@ -25,7 +25,6 @@ import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-posts',
-  standalone: true,
   imports: [
     MatCardModule,
     MatButtonModule,

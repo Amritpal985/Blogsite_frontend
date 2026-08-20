@@ -21,14 +21,7 @@ import { Subject, switchMap, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-post',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatChipsModule,
-    QuillViewComponent,
-    CommentComponent,
-    SkeletonModule,
-  ],
+  imports: [CommonModule, MatChipsModule, QuillViewComponent, CommentComponent, SkeletonModule],
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

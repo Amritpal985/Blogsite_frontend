@@ -26,7 +26,6 @@ import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-user-profile',
-  standalone: true,
   imports: [
     MatTabsModule,
     MatFormFieldModule,

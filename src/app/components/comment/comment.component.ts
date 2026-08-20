@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzCommentModule } from 'ng-zorro-antd/comment';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { CommentNode, CommentResponse } from '../../interfaces';
@@ -32,7 +32,7 @@ import { Subject, takeUntil } from 'rxjs';
     NzAvatarModule,
     NzCommentModule,
     NzIconModule,
-    NzToolTipModule,
+    NzTooltipModule,
     NzButtonModule,
     NzInputModule,
     FormsModule,

@@ -17,6 +17,7 @@ describe('CommentComponent', () => {
 
     fixture = TestBed.createComponent(CommentComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('postId', 1);
     fixture.detectChanges();
   });
 

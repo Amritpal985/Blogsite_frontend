@@ -1,12 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import {
   AfterViewChecked,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   inject,
   OnDestroy,
   OnInit,
-  ViewChild,
+  viewChild,
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ChatMessage, Follower } from '../../interfaces';
@@ -22,14 +24,16 @@ import { Subject, takeUntil } from 'rxjs';
   imports: [CommonModule, MatIconModule, FormsModule],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
   private _http = inject(HttpClient);
   private wsService = inject(WebSocketService);
   private popupService = inject(PopupService);
+  private cdr = inject(ChangeDetectorRef);
   private destroy$ = new Subject<void>();
 
-  @ViewChild('chatContainer') private chatContainer!: ElementRef;
+  private readonly chatContainer = viewChild.required<ElementRef>('chatContainer');
 
   followers: Follower[] = [];
   activeChatId = 0;
@@ -45,6 +49,7 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
           this.followers = res.followers;
           this.activeChatId = this.followers[0]?.id;
           if (this.activeChatId) this.getChatMessages(this.activeChatId);
+          this.cdr.markForCheck();
         },
         error: () => {
           this.popupService.showAlertMessage(Constants.GENERIC_MSG, Constants.SNACKBAR_ERROR);
@@ -55,12 +60,14 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.wsService.messages$.pipe(takeUntil(this.destroy$)).subscribe((msg) => {
       this.messageToSend = '';
       this.chatMessages.push(msg);
+      this.cdr.markForCheck();
     });
   }
 
   ngAfterViewChecked(): void {
     try {
-      this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
+      this.chatContainer().nativeElement.scrollTop =
+        this.chatContainer().nativeElement.scrollHeight;
     } catch {
       // do nothing
     }
@@ -79,6 +86,7 @@ export class ChatComponent implements OnInit, AfterViewChecked, OnDestroy {
       .subscribe({
         next: (res) => {
           this.chatMessages = res.messages;
+          this.cdr.markForCheck();
         },
         error: () => {
           this.popupService.showAlertMessage(Constants.GENERIC_MSG, Constants.SNACKBAR_ERROR);

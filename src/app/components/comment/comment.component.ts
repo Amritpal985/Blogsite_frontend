@@ -4,9 +4,9 @@ import {
   ChangeDetectorRef,
   Component,
   inject,
-  Input,
   OnDestroy,
   OnInit,
+  input,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
@@ -44,7 +44,7 @@ import { Subject, takeUntil } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CommentComponent implements OnInit, OnDestroy {
-  @Input() postId!: number;
+  readonly postId = input.required<number>();
 
   private loginService = inject(LoginService);
   private popupService = inject(PopupService);
@@ -66,7 +66,7 @@ export class CommentComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.commentsLoading = true;
-    const url = `${Constants.GET_COMMENTS}/${this.postId}`;
+    const url = `${Constants.GET_COMMENTS}/${this.postId()}`;
     this._http
       .get<CommentNode[]>(url)
       .pipe(takeUntil(this.destroy$))
@@ -107,7 +107,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     }
     this.submitting = true;
     const content = this.commentText;
-    const url = `${Constants.ADD_COMMENT}/${this.postId}`;
+    const url = `${Constants.ADD_COMMENT}/${this.postId()}`;
     this._http
       .post<CommentResponse>(url, { content })
       .pipe(takeUntil(this.destroy$))

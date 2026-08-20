@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
@@ -9,5 +9,5 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SpinnerComponent {
-  @Input() isLoading = false;
+  readonly isLoading = input(false);
 }

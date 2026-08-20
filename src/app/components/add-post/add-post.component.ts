@@ -6,7 +6,7 @@ import {
   inject,
   OnDestroy,
   OnInit,
-  ViewChild,
+  viewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -42,7 +42,7 @@ import { Router } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddPostComponent implements OnInit, OnDestroy {
-  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+  readonly fileInput = viewChild.required<ElementRef<HTMLInputElement>>('fileInput');
 
   private cdr = inject(ChangeDetectorRef);
   private popupService = inject(PopupService);
@@ -152,7 +152,7 @@ export class AddPostComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res) => {
           this.form.reset();
-          this.fileInput.nativeElement.value = '';
+          this.fileInput().nativeElement.value = '';
           this.cdr.markForCheck();
           this.popupService.showAlertMessage(
             res?.message || Constants.POST_CREATED_MSG,
